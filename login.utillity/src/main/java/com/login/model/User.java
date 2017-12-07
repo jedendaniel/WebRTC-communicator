@@ -1,4 +1,4 @@
-package com.webrtcapi.login.model;
+package com.login.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
