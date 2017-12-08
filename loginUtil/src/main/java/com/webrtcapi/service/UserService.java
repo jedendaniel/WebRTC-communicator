@@ -12,21 +12,27 @@ public class UserService implements IUserService {
 
     @Override
     public List<User> getAllUsers() {
+        return userDAO.getAllUsers();
     }
 
     @Override
     public User getUserById(int userId) {
         User obj = userDAO.getUserById(userId);
+        return obj;
     }
 
     @Override
     public boolean addUser(User user) {
-        return false;
+        if(userDAO.userExist(user.getLogin(), user.getEmail()))
+            return false;
+        else{
+            userDAO.addUser(user);
+            return true;
+        }
     }
 
     @Override
     public void updateUser(User user) {
-
     }
 
     @Override
