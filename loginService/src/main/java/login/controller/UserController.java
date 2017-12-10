@@ -1,8 +1,9 @@
 package login.controller;
 
 import login.dao.IUserDAO;
-import login.dao.UserDAO;
 import login.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,7 +12,8 @@ import java.util.List;
 @RestController
 public class UserController {
 
-    IUserDAO userDAO = new UserDAO();
+    @Autowired
+    IUserDAO userDAO;
 
     @RequestMapping("/testUser")
     public User user() {
@@ -19,7 +21,7 @@ public class UserController {
     }
 
     @RequestMapping("/users")
-    public List<User> getAllUsers(){
-        return userDAO.getAllUsers();
+    public Iterable<User> getAllUsers(){
+        return userDAO.findAll();
     }
 }
