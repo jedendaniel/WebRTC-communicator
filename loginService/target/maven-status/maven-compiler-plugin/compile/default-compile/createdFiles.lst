@@ -1,3 +1,5 @@
+login/dao/UserDAO.class
+login/dao/IUserDAO.class
 login/Application.class
 login/controller/UserController.class
 login/model/User.class
