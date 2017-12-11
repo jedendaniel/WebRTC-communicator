@@ -3,7 +3,7 @@ package login.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class User {
     private static final long serialVersionUID = 1L;
 
@@ -12,53 +12,45 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "login")
-    private String login;
+    @OneToOne
+    @JoinColumn(name = "private_data_id")
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @PrimaryKeyJoinColumn
+    private UserPrivateData userPrivateData;
 
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "email")
-    private String email;
+    @OneToOne
+    @JoinColumn(name = "public_data_id")
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @PrimaryKeyJoinColumn
+    private UserPublicData userPublicData;
 
     public User() {
+        this.userPrivateData = new UserPrivateData();
+        this.userPublicData = new UserPublicData();
     }
 
-    public User(long id) {
-        this.id = id;
-    }
-
-    public User(String login, String password, String email) {
-        this.login = login;
-        this.password = password;
-        this.email = email;
+    public User(UserPrivateData userPrivateData, UserPublicData userPublicData) {
+        this.userPrivateData = userPrivateData;
+        this.userPublicData = userPublicData;
     }
 
     public long getId() {
         return id;
     }
 
-    public String getLogin() {
-        return login;
+    public UserPrivateData getUserPrivateData() {
+        return userPrivateData;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUserPrivateData(UserPrivateData userPrivateData) {
+        this.userPrivateData = userPrivateData;
     }
 
-    public String getPassword() {
-        return password;
+    public UserPublicData getUserPublicData() {
+        return userPublicData;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserPublicData(UserPublicData userPublicData) {
+        this.userPublicData = userPublicData;
     }
 }

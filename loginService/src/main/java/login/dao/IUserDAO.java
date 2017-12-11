@@ -17,7 +17,9 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 /**
  * A DAO for the entity User is simply created by extending the CrudRepository
@@ -29,13 +31,14 @@ import org.springframework.data.repository.CrudRepository;
  * @author netgloo
  */
 @Transactional
-public interface IUserDAO extends CrudRepository<User, Long> {
+public interface IUserDAO extends JpaRepository<User, Long> {
 
     /**
      * Return the user having the passed email or null if no user is found.
      *
-     * @param email the user email.
+     * @param login the user email.
      */
-    public User findByEmail(String email);
+    //@Query("SELECT u FROM user u WHERE p.login = :postedLogin")
+    //public User findByLogin(@Param("postedLogin")String login);
 
 }

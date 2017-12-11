@@ -1,19 +1,14 @@
-package com.webrtcapi.model;
+package login.model;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "User")
-public class User {
-    private static final long serialVersionUID = 1L;
-
+@Table(name = "user_private_data")
+public class UserPrivateData {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @Column(name = "login")
-    private String login;
+    private long id;
 
     @Column(name = "password")
     private String password;
@@ -21,21 +16,16 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    public UserPrivateData() {
+    }
 
-    public int getId() {
+    public UserPrivateData(String password, String email) {
+        this.password = password;
+        this.email = email;
+    }
+
+    public long getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
     }
 
     public String getPassword() {

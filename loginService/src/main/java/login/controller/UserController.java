@@ -2,6 +2,8 @@ package login.controller;
 
 import login.dao.IUserDAO;
 import login.model.User;
+import login.model.UserPrivateData;
+import login.model.UserPublicData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +19,6 @@ public class UserController {
     @Autowired
     IUserDAO userDao;
 
-    @RequestMapping("/testUser")
-    public User user() {
-        return new User("testLogin", "testPassword","testEmail");
-    }
-
     @RequestMapping(value = "/users", produces="application/json")
     @ResponseBody
     public Iterable<User> getAllUsers(){
@@ -32,7 +29,7 @@ public class UserController {
 //    @ResponseBody
 //    public ResponseEntity<Boolean> getUser(@RequestBody String login){
 //        try{
-//
+//            return new ResponseEntity<>();
 //        }
 //    }
 
@@ -42,8 +39,13 @@ public class UserController {
     public ResponseEntity<String> create(@RequestBody User postedUser) {
         //User user = null;
         try {
+            UserPublicData userPublicData = new UserPublicData();
+            userPublicData.setLogin(postedUser.getUserPublicData().getLogin());
+            UserPrivateData userPrivateDataData = new UserPrivateData();
+            userPrivateDataData.setPassword(postedUser.getUserPrivateData().getPassword());
+            userPrivateDataData.setEmail(postedUser.getUserPrivateData().getEmail());
             //user = new User(user.getLogin(), user.getPassword(), user.getEmail());
-            userDao.save(postedUser);
+            userDao.save(new User(userPrivateDataData,userPublicData));
         }
         catch (Exception ex) {
             return new ResponseEntity<String>(ex.toString(),HttpStatus.CONFLICT);
@@ -55,8 +57,7 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<Boolean> delete(long id) {
         try {
-            User user = new User(id);
-            userDao.delete(user);
+            userDao.delete(id);
         }
         catch (Exception ex) {
             return new ResponseEntity<Boolean>(false, HttpStatus.NOT_FOUND);
