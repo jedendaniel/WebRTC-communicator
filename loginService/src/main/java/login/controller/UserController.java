@@ -28,14 +28,22 @@ public class UserController {
         return userDao.findAll();
     }
 
+//    @RequestMapping(value = "/user/{login}")
+//    @ResponseBody
+//    public ResponseEntity<Boolean> getUser(@RequestBody String login){
+//        try{
+//
+//        }
+//    }
+
     //TODO: throw some exception if login or email is used, do it in some service or I don't know
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public ResponseEntity<String> create(@RequestBody String login, String password, String email) {
-        User user = null;
+    public ResponseEntity<String> create(@RequestBody User postedUser) {
+        //User user = null;
         try {
-            user = new User(login, password, email);
-            userDao.save(user);
+            //user = new User(user.getLogin(), user.getPassword(), user.getEmail());
+            userDao.save(postedUser);
         }
         catch (Exception ex) {
             return new ResponseEntity<String>(ex.toString(),HttpStatus.CONFLICT);

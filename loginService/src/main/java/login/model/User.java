@@ -8,17 +8,17 @@ public class User {
     private static final long serialVersionUID = 1L;
 
     @Id
-    //@Column(name = "id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-   // @Column(name = "login")
+    @Column(name = "login")
     private String login;
 
-   // @Column(name = "password")
+    @Column(name = "password")
     private String password;
 
-   // @Column(name = "email")
+    @Column(name = "email")
     private String email;
 
     public User() {
