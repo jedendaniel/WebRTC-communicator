@@ -3,4 +3,6 @@
 #alter table user drop column private_data_id
 #alter table user add (public_data_id int unsigned not null);
 #alter table user add foreign key (public_data_id) references user_public_data(id);
-select * from user;
+#select * from user;
+drop table user_private_data;
+drop table user_public_data;

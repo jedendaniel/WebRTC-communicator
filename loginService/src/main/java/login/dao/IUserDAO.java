@@ -36,9 +36,9 @@ public interface IUserDAO extends JpaRepository<User, Long> {
     /**
      * Return the user having the passed email or null if no user is found.
      *
-     * @param login the user email.
+     * @param name the user email.
      */
-    //@Query("SELECT u FROM user u WHERE p.login = :postedLogin")
-    //public User findByLogin(@Param("postedLogin")String login);
+    @Query("SELECT u FROM user u WHERE p.name = :postedName")
+    public User findByName(@Param("postedName")String name);
 
 }

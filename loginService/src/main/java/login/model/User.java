@@ -12,45 +12,49 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne
-    @JoinColumn(name = "private_data_id")
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @PrimaryKeyJoinColumn
-    private UserPrivateData userPrivateData;
+    @Column(name="name")
+    private String name;
 
-    @OneToOne
-    @JoinColumn(name = "public_data_id")
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @PrimaryKeyJoinColumn
-    private UserPublicData userPublicData;
+    @Column(name="email")
+    private String email;
+
+    @Column(name="password")
+    private String password;
 
     public User() {
-        this.userPrivateData = new UserPrivateData();
-        this.userPublicData = new UserPublicData();
     }
 
-    public User(UserPrivateData userPrivateData, UserPublicData userPublicData) {
-        this.userPrivateData = userPrivateData;
-        this.userPublicData = userPublicData;
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
     }
 
     public long getId() {
         return id;
     }
 
-    public UserPrivateData getUserPrivateData() {
-        return userPrivateData;
+    public String getName() {
+        return name;
     }
 
-    public void setUserPrivateData(UserPrivateData userPrivateData) {
-        this.userPrivateData = userPrivateData;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public UserPublicData getUserPublicData() {
-        return userPublicData;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUserPublicData(UserPublicData userPublicData) {
-        this.userPublicData = userPublicData;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
