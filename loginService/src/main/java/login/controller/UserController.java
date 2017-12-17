@@ -20,28 +20,41 @@ public class UserController {
         return userDao.findAll();
     }
 
-//    @RequestMapping(value = "/user/{login}")
-//    @ResponseBody
-//    public ResponseEntity<Boolean> getUser(@RequestBody String login){
-//        try{
-//            return new ResponseEntity<>(true, HttpStatus.FOUND);
-//        }
-//        catch (Exception e){
-//            return  new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
-//        }
-//    }
+    @RequestMapping(value = "/user")
+    @ResponseBody
+    public ResponseEntity<Boolean> getUser(@RequestBody String name){
+        try{
+            return new ResponseEntity<>(userDao.findByName(name),HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(false,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-    //TODO: throw some exception if login or email is used, do it in some service or I don't know
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public ResponseEntity<String> create(@RequestBody User postedUser) {
+        boolean alreadyExists = false;
+        String message = "";
         try {
-            userDao.save(postedUser);
+            if(userDao.findByName(postedUser.getName())){
+                message += "Name is already in use\n";
+                alreadyExists = true;
+            }
+            if(userDao.findByLogin(postedUser.getLogin())){
+                message += "Login is already in use\n";
+                alreadyExists = true;
+            }
+            if(!alreadyExists){
+                message = "User created successfully!";
+                userDao.save(postedUser);
+                return new ResponseEntity<String>(message,HttpStatus.OK);
+            }
         }
         catch (Exception ex) {
             return new ResponseEntity<String>(ex.toString(),HttpStatus.CONFLICT);
         }
-        return new ResponseEntity<String>("Dodano",HttpStatus.OK);
+        return new ResponseEntity<String>(message,HttpStatus.CONFLICT);
     }
 
     @RequestMapping(value ="/delete", consumes = "application/json")
