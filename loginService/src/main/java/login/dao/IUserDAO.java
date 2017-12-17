@@ -21,24 +21,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-/**
- * A DAO for the entity User is simply created by extending the CrudRepository
- * interface provided by spring. The following methods are some of the ones
- * available from such interface: save, delete, deleteAll, findOne and findAll.
- * The magic is that such methods must not be implemented, and moreover it is
- * possible create new query methods working only by defining their signature!
- *
- * @author netgloo
- */
 @Transactional
 public interface IUserDAO extends JpaRepository<User, Long> {
 
-    /**
-     * Return the user having the passed email or null if no user is found.
-     *
-     * @param name the user email.
-     */
-    @Query("SELECT u FROM user u WHERE p.name = :postedName")
-    public User findByName(@Param("postedName")String name);
-
+    @Query("SELECT u FROM User u WHERE u.name = ?1")
+    public User findByName(String name);
 }

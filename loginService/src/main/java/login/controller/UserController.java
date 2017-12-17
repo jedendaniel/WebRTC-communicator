@@ -20,16 +20,16 @@ public class UserController {
         return userDao.findAll();
     }
 
-    @RequestMapping(value = "/user/{login}")
-    @ResponseBody
-    public ResponseEntity<Boolean> getUser(@RequestBody String login){
-        try{
-            return new ResponseEntity<>(true, HttpStatus.FOUND);
-        }
-        catch (Exception e){
-            return  new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
-        }
-    }
+//    @RequestMapping(value = "/user/{login}")
+//    @ResponseBody
+//    public ResponseEntity<Boolean> getUser(@RequestBody String login){
+//        try{
+//            return new ResponseEntity<>(true, HttpStatus.FOUND);
+//        }
+//        catch (Exception e){
+//            return  new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+//        }
+//    }
 
     //TODO: throw some exception if login or email is used, do it in some service or I don't know
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = "application/json")
