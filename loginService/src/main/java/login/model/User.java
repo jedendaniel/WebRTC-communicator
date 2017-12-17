@@ -1,6 +1,9 @@
 package login.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -20,6 +23,9 @@ public class User {
 
     @Column(name="password")
     private String password;
+
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+//    private ArrayList<Relation> relations = new ArrayList<>();
 
     public User() {
     }
@@ -57,4 +63,8 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+//
+//    public ArrayList<Relation> getRelations() {
+//        return relations;
+//    }
 }
