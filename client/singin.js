@@ -1,7 +1,7 @@
 angular.module('webrtcapi', [])
     .controller('Hello', function($scope, $http) {
-        $http.get('http://localhost:8090/login').
+        $http.get('http://localhost:8090/user/getAll').
         then(function(response) {
-            $scope.greeting = response.data;
+            $scope.response = response.data;
         });
     });

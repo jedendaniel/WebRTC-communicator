@@ -5,22 +5,26 @@ import login.dao.IUserDAO;
 import login.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping(path="/user")
 public class UserController {
 
     @Autowired
     IUserDAO userDao;
 
-    @RequestMapping(value = "/users", produces="application/json")
+    String mainPath = "/user";
+
+    @RequestMapping(value = "/getAll", produces="application/json")
     @ResponseBody
     public Iterable<User> getAllUsers(){
         return userDao.findAll();
     }
 
-    @RequestMapping(value = "/user")
+    @RequestMapping(value = "/byName")
     @ResponseBody
     public ResponseEntity<Boolean> getUser(@RequestBody String name){
         try{
@@ -31,9 +35,28 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/signin", method = RequestMethod.POST, produces="application/json", consumes = "application/json")
+    @ResponseBody
+    public ResponseEntity<User> signIn(@RequestBody User postedUser){
+        try{
+            User user = userDao.signIn(postedUser.getLogin(),postedUser.getPassword());
+            if(user != null){
+                return new ResponseEntity<>(user, HttpStatus.FOUND);
+            }
+            else{
+                return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
+            }
+
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public ResponseEntity<String> create(@RequestBody User postedUser) {
+        //User newUser = new User(postedUser.getName(),postedUser.getLogin(),postedUser.getPassword());
         boolean alreadyExists = false;
         String message = "";
         try {

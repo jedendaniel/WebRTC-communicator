@@ -3,13 +3,17 @@ body {
 }
 
 h1 {
-    color: blue;
+    color: rgb(64, 64, 122);
 }
 
 p {
-    color: red;
+    color: rgb(43, 31, 31);
 }
 
 #p01 {
-    color: rgb(21, 255, 0);
+    color: rgb(33, 114, 24);
+}
+
+#p-error {
+    color: rgb(255, 0, 0);
 }
