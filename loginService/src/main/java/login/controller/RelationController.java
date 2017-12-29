@@ -11,18 +11,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping(path = "/relation")
 public class RelationController {
 
     @Autowired
     private IRelationDAO relationDao;
 
-    @RequestMapping(value = "/relations", produces="application/json")
+    @RequestMapping(value = "/getAll", produces="application/json")
     @ResponseBody
     public Iterable<Relation> getAllRelations(){
         return relationDao.findAll();
     }
 
-    @RequestMapping(value = "/relation", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "/byUser", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public ResponseEntity<Iterable<Relation>> getUserRelations(@RequestBody User user){
         try{
@@ -33,7 +34,7 @@ public class RelationController {
         }
     }
 
-    @RequestMapping(value = "/relation/invite", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "/invite", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public ResponseEntity<String> Invite(@RequestBody User user1, @RequestBody User user2){
         try{
@@ -51,7 +52,7 @@ public class RelationController {
         }
     }
 
-    @RequestMapping(value = "/relation/accept", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "/accept", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public ResponseEntity<?> Accept(@RequestBody Relation relation){
         try{
@@ -64,7 +65,7 @@ public class RelationController {
         }
     }
 
-    @RequestMapping(value = "/relation/reject", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "/reject", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public ResponseEntity<?> Reject(@RequestBody Relation relation){
         try{
