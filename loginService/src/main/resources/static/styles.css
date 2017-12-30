@@ -1,0 +1,19 @@
+body {
+    background-color: rgb(175, 175, 175);
+}
+
+h1 {
+    color: rgb(64, 64, 122);
+}
+
+p {
+    color: rgb(43, 31, 31);
+}
+
+#p01 {
+    color: rgb(33, 114, 24);
+}
+
+#p-error {
+    color: rgb(255, 0, 0);
+}
