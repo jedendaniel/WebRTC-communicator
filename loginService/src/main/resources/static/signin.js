@@ -9,12 +9,10 @@ function validateLogin() {
 
 $(function() {
     $(document).ready(function() {
-        var $users = $('#users');
 
-        $('#create-user').on('click', function() {
-
+        $('#sign-in').on('click', function() {
+            console.log("Signing, not singing...")
             var user = {
-                name: $('#name').val(),
                 login: $('#login').val(),
                 password: $('#password').val(),
             };
@@ -23,10 +21,10 @@ $(function() {
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 type: 'POST',
-                url: 'http://localhost:8090/user/create',
+                url: 'http://localhost:8090/user/signin',
                 data: JSON.stringify(user),
-                success: function() {
-                    alert('dodano :)');
+                success: function(logedUser) {
+                    window.location.href = "http://localhost:8090/main.html";
                 },
                 error: function() {
                     alert('error :(');

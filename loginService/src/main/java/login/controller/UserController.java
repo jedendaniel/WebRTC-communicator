@@ -37,25 +37,24 @@ public class UserController {
 
     @RequestMapping(value = "/signin", method = RequestMethod.POST, produces="application/json", consumes = "application/json")
     @ResponseBody
-    public ResponseEntity<User> signIn(@RequestBody User postedUser){
+    public User signIn(@RequestBody User postedUser){
         try{
             User user = userDao.signIn(postedUser.getLogin(),postedUser.getPassword());
             if(user != null){
-                return new ResponseEntity<>(user, HttpStatus.FOUND);
+                return user;
             }
             else{
-                return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
+                return null;
             }
-
         }
         catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return null;
         }
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public ResponseEntity<String> create(@RequestBody User postedUser) {
+    public Boolean create(@RequestBody User postedUser) {
         //User newUser = new User(postedUser.getName(),postedUser.getLogin(),postedUser.getPassword());
         boolean alreadyExists = false;
         String message = "";
@@ -71,13 +70,15 @@ public class UserController {
             if(!alreadyExists){
                 message = "User created successfully!";
                 userDao.save(postedUser);
-                return new ResponseEntity<String>(message,HttpStatus.OK);
+                return true;
+//                return new ResponseEntity<String>(message,HttpStatus.OK);
             }
         }
         catch (Exception ex) {
-            return new ResponseEntity<String>(ex.toString(),HttpStatus.CONFLICT);
+            return false;
+//            return new ResponseEntity<String>(ex.toString(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<String>(message,HttpStatus.CONFLICT);
+        return !alreadyExists;
     }
 
     @RequestMapping(value ="/delete", consumes = "application/json")
