@@ -10,23 +10,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path="/user")
+@RequestMapping(path="/api")
 public class UserController {
 
     @Autowired
     IUserDAO userDao;
 
-    String mainPath = "/user";
-
-    @RequestMapping(value = "/getAll", produces="application/json")
+    @RequestMapping(value = "/users",method = RequestMethod.GET, produces="application/json")
     @ResponseBody
-    public Iterable<User> getAllUsers(){
+    public Iterable<User> getAll(){
         return userDao.findAll();
     }
 
-    @RequestMapping(value = "/byName")
+    @RequestMapping(value = "/users/{name}")
     @ResponseBody
-    public ResponseEntity<Boolean> getUser(@RequestBody String name){
+    public ResponseEntity<Boolean> getByName(@PathVariable("name") String name){
         try{
             return new ResponseEntity<>(userDao.findByName(name),HttpStatus.OK);
         }
@@ -35,16 +33,33 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/signin", method = RequestMethod.POST, produces="application/json", consumes = "application/json")
+//    @RequestMapping(value = "/users", method = RequestMethod.POST, produces="application/json", consumes = "application/json")
+//    @ResponseBody
+//    public ResponseEntity<User> ByLoginAndPassword(@RequestBody User postedUser){
+//        try{
+//            User user = userDao.signIn(postedUser.getLogin(),postedUser.getPassword());
+//            if(user != null){
+//                return new ResponseEntity<>(user, HttpStatus.OK);
+//            }
+//            else{
+//                return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
+//            }
+//        }
+//        catch(Exception e){
+//            return null;
+//        }
+//    }
+
+    @RequestMapping(value = "/users/{login}{password}", method = RequestMethod.GET, produces="application/json", consumes = "application/json")
     @ResponseBody
-    public User signIn(@RequestBody User postedUser){
+    public ResponseEntity<User> ByLoginAndPassword(@PathVariable("login") String login, @PathVariable("password") String password){
         try{
-            User user = userDao.signIn(postedUser.getLogin(),postedUser.getPassword());
+            User user = userDao.signIn(login,password);
             if(user != null){
-                return user;
+                return new ResponseEntity<>(user, HttpStatus.OK);
             }
             else{
-                return null;
+                return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
             }
         }
         catch(Exception e){
@@ -52,9 +67,9 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "/users", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public Boolean create(@RequestBody User postedUser) {
+    public ResponseEntity<User> create(@RequestBody User postedUser) {
         //User newUser = new User(postedUser.getName(),postedUser.getLogin(),postedUser.getPassword());
         boolean alreadyExists = false;
         String message = "";
@@ -70,18 +85,17 @@ public class UserController {
             if(!alreadyExists){
                 message = "User created successfully!";
                 userDao.save(postedUser);
-                return true;
-//                return new ResponseEntity<String>(message,HttpStatus.OK);
+                return new ResponseEntity<>(postedUser, HttpStatus.OK);
             }
         }
         catch (Exception ex) {
-            return false;
-//            return new ResponseEntity<String>(ex.toString(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return !alreadyExists;
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
+
     }
 
-    @RequestMapping(value ="/delete", consumes = "application/json")
+    @RequestMapping(value ="/users", method = RequestMethod.DELETE,consumes = "application/json")
     @ResponseBody
     public ResponseEntity<Boolean> delete(@RequestBody long id) {
         try {

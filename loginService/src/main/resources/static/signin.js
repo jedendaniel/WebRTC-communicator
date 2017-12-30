@@ -20,10 +20,10 @@ $(function() {
             $.ajax({
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
-                type: 'POST',
-                url: 'http://localhost:8090/user/signin',
+                //type: 'POST',
+                url: 'http://localhost:8090/api/users/' + $('#login').val() + '&' + $('#password').val(),
                 data: JSON.stringify(user),
-                success: function(logedUser) {
+                success: function() {
                     window.location.href = "http://localhost:8090/main.html";
                 },
                 error: function() {

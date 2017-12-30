@@ -23,7 +23,7 @@ $(function() {
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 type: 'POST',
-                url: 'http://localhost:8090/user/create',
+                url: 'http://localhost:8090/api/users',
                 data: JSON.stringify(user),
                 success: function() {
                     alert('dodano :)');
