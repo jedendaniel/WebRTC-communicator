@@ -22,33 +22,33 @@ public class UserController {
         return userDao.findAll();
     }
 
-    @RequestMapping(value = "/users/{name}")
-    @ResponseBody
-    public ResponseEntity<Boolean> getByName(@PathVariable("name") String name){
-        try{
-            return new ResponseEntity<>(userDao.findByName(name),HttpStatus.OK);
-        }
-        catch(Exception e){
-            return new ResponseEntity<>(false,HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-//    @RequestMapping(value = "/users", method = RequestMethod.POST, produces="application/json", consumes = "application/json")
+//    @RequestMapping(value = "/users/{name}")
 //    @ResponseBody
-//    public ResponseEntity<User> ByLoginAndPassword(@RequestBody User postedUser){
+//    public ResponseEntity<Boolean> getByName(@PathVariable("name") String name){
 //        try{
-//            User user = userDao.signIn(postedUser.getLogin(),postedUser.getPassword());
-//            if(user != null){
-//                return new ResponseEntity<>(user, HttpStatus.OK);
-//            }
-//            else{
-//                return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
-//            }
+//            return new ResponseEntity<>(userDao.findByName(name),HttpStatus.OK);
 //        }
 //        catch(Exception e){
-//            return null;
+//            return new ResponseEntity<>(false,HttpStatus.INTERNAL_SERVER_ERROR);
 //        }
 //    }
+
+    @RequestMapping(value = "/users", method = RequestMethod.POST, produces="application/json", consumes = "application/json")
+    @ResponseBody
+    public ResponseEntity<User> ByLoginAndPassword(@RequestBody User postedUser){
+        try{
+            User user = userDao.signIn(postedUser.getLogin(),postedUser.getPassword());
+            if(user != null){
+                return new ResponseEntity<>(user, HttpStatus.OK);
+            }
+            else{
+                return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
+            }
+        }
+        catch(Exception e){
+            return null;
+        }
+    }
 
     @RequestMapping(value = "/users/{login}{password}", method = RequestMethod.GET, produces="application/json", consumes = "application/json")
     @ResponseBody
