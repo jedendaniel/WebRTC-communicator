@@ -24,7 +24,7 @@ $(function() {
                 url: 'http://localhost:8090/api/users/' + $('#login').val() + '&' + $('#password').val(),
                 data: JSON.stringify(user),
                 success: function() {
-                    window.location.href = "http://localhost:8090/main.html";
+                    window.location.href = "http://localhost:8090/home.html";
                 },
                 error: function() {
                     alert('error :(');
