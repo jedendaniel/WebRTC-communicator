@@ -1,5 +1,10 @@
-login\Application.class
-login\controller\UserController.class
-login\controller\MainCotroller.class
-login\model\User.class
-login\dao\IUserDAO.class
+login/controller/MainCotroller.class
+login/dao/IUserDAO.class
+login/controller/UserController.class
+login/controller/RelationController.class
+login/Application.class
+login/model/Relation.class
+login/dao/IRelationDAO.class
+login/model/RelationStatus.class
+websocket/WebSocketConfig.class
+login/model/User.class

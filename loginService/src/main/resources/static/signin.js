@@ -20,8 +20,8 @@ $(function() {
             $.ajax({
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
-                //type: 'POST',
-                url: 'http://localhost:8090/api/users/' + $('#login').val() + '&' + $('#password').val(),
+                type: 'POST',
+                url: 'http://localhost:8090/api/users',
                 data: JSON.stringify(user),
                 success: function() {
                     window.location.href = "http://localhost:8090/home.html";
