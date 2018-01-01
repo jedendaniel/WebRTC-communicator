@@ -28,8 +28,11 @@ public interface IUserDAO extends JpaRepository<User, Long> {
     public boolean findByName(String name);
 
     @Query("SELECT case when (count(u) > 0)  then true else false end FROM User u WHERE u.login = ?1")
-    public boolean findByLogin(String login);
+    public boolean validateLogin(String login);
 
     @Query("SELECT u FROM User u WHERE u.login = ?1 AND u.password = ?2")
     public User signIn(String login, String password);
+
+    @Query("SELECT u FROM User u WHERE u.login = ?1 AND u.password = ?2")
+    public User findByLogin(String login);
 }

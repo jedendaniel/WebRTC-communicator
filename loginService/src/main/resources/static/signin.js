@@ -7,6 +7,10 @@ function validateLogin() {
     }
 }
 
+function validatePassword(password) {
+
+}
+
 $(function() {
     $(document).ready(function() {
 
@@ -20,11 +24,22 @@ $(function() {
             $.ajax({
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
-                type: 'POST',
-                url: 'http://localhost:8090/api/users',
-                data: JSON.stringify(user),
-                success: function() {
-                    window.location.href = "http://localhost:8090/home.html";
+                type: 'GET',
+                url: 'http://localhost:8090/api/users/login="' + $('#login').val() + '"',
+                //data: JSON.stringify(user),
+                success: function(response) {
+                    var user = {
+                                    login: $('#login').val(),
+                                    password: $('#password').val(),
+                                };
+                    var respUser = JSON.parse(response);
+                    if(user.password === respUser.password){
+                        localStorage.setItem("login", $("#login"));
+                        window.location.href = "http://localhost:8090/home.html";
+                    }
+                    else{
+                        alert('wrong login or password');
+                    }
                 },
                 error: function() {
                     alert('error :(');
@@ -33,3 +48,11 @@ $(function() {
         });
     });
 });
+
+$(function () {
+    $( "#sign-in" ).click(function() { saveData(); });
+});
+
+function saveData(){
+    localStorage.setItem("login", $("#login"));
+}

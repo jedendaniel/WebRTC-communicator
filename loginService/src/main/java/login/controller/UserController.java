@@ -33,11 +33,11 @@ public class UserController {
 //        }
 //    }
 
-    @RequestMapping(value = "/users", method = RequestMethod.POST, produces="application/json", consumes = "application/json")
+    @RequestMapping(value = "/users/{login}", method = RequestMethod.GET, produces="application/json")
     @ResponseBody
-    public ResponseEntity<User> ByLoginAndPassword(@RequestBody User postedUser){
+    public ResponseEntity<User> byLogin(@RequestParam("login") String login){
         try{
-            User user = userDao.signIn(postedUser.getLogin(),postedUser.getPassword());
+            User user = userDao.findByLogin(login);
             if(user != null){
                 return new ResponseEntity<>(user, HttpStatus.OK);
             }
@@ -46,24 +46,7 @@ public class UserController {
             }
         }
         catch(Exception e){
-            return null;
-        }
-    }
-
-    @RequestMapping(value = "/users/{login}{password}", method = RequestMethod.GET, produces="application/json", consumes = "application/json")
-    @ResponseBody
-    public ResponseEntity<User> ByLoginAndPassword(@PathVariable("login") String login, @PathVariable("password") String password){
-        try{
-            User user = userDao.signIn(login,password);
-            if(user != null){
-                return new ResponseEntity<>(user, HttpStatus.OK);
-            }
-            else{
-                return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
-            }
-        }
-        catch(Exception e){
-            return null;
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -72,18 +55,14 @@ public class UserController {
     public ResponseEntity<User> create(@RequestBody User postedUser) {
         //User newUser = new User(postedUser.getName(),postedUser.getLogin(),postedUser.getPassword());
         boolean alreadyExists = false;
-        String message = "";
         try {
             if(userDao.findByName(postedUser.getName())){
-                message += "Name is already in use\n";
-                alreadyExists = true;
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
-            if(userDao.findByLogin(postedUser.getLogin())){
-                message += "Login is already in use\n";
-                alreadyExists = true;
+            if(userDao.validateLogin(postedUser.getLogin())){
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
             if(!alreadyExists){
-                message = "User created successfully!";
                 userDao.save(postedUser);
                 return new ResponseEntity<>(postedUser, HttpStatus.OK);
             }
@@ -91,7 +70,7 @@ public class UserController {
         catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(HttpStatus.CONFLICT);
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
 
