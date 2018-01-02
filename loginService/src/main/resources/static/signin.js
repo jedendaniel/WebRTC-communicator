@@ -22,37 +22,19 @@ $(function() {
             };
 
             $.ajax({
-                dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 type: 'GET',
-                url: 'http://localhost:8090/api/users/login="' + $('#login').val() + '"',
+                url: 'http://localhost:8090/api/users?login=' +
+                    $('#login').val() + '&password=' + $('#password').val(),
                 //data: JSON.stringify(user),
                 success: function(response) {
-                    var user = {
-                                    login: $('#login').val(),
-                                    password: $('#password').val(),
-                                };
-                    var respUser = JSON.parse(response);
-                    if(user.password === respUser.password){
-                        localStorage.setItem("login", $("#login"));
-                        window.location.href = "http://localhost:8090/home.html";
-                    }
-                    else{
-                        alert('wrong login or password');
-                    }
+                    localStorage.setItem("login", $("#login").val());
+                    window.location.href = "http://localhost:8090/home.html";
                 },
                 error: function() {
-                    alert('error :(');
+                    alert('Wrong login or password :/');
                 }
             });
         });
     });
 });
-
-$(function () {
-    $( "#sign-in" ).click(function() { saveData(); });
-});
-
-function saveData(){
-    localStorage.setItem("login", $("#login"));
-}

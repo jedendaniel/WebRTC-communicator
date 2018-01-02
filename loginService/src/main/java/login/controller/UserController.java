@@ -16,33 +16,22 @@ public class UserController {
     @Autowired
     IUserDAO userDao;
 
-    @RequestMapping(value = "/users",method = RequestMethod.GET, produces="application/json")
-    @ResponseBody
-    public Iterable<User> getAll(){
-        return userDao.findAll();
-    }
-
-//    @RequestMapping(value = "/users/{name}")
+//    @RequestMapping(value = "/users",method = RequestMethod.GET, produces="application/json")
 //    @ResponseBody
-//    public ResponseEntity<Boolean> getByName(@PathVariable("name") String name){
-//        try{
-//            return new ResponseEntity<>(userDao.findByName(name),HttpStatus.OK);
-//        }
-//        catch(Exception e){
-//            return new ResponseEntity<>(false,HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
+//    public Iterable<User> getAll(){
+//        return userDao.findAll();
 //    }
 
-    @RequestMapping(value = "/users/{login}", method = RequestMethod.GET, produces="application/json")
+    @RequestMapping(value = "/users", method = RequestMethod.GET, produces="application/json")
     @ResponseBody
-    public ResponseEntity<User> byLogin(@RequestParam("login") String login){
+    public ResponseEntity byLogin(@RequestParam("login") String login, @RequestParam("password") String password){
         try{
-            User user = userDao.findByLogin(login);
+            User user = userDao.validateUser(login,password);
             if(user != null){
-                return new ResponseEntity<>(user, HttpStatus.OK);
+                return new ResponseEntity<>(HttpStatus.OK);
             }
             else{
-                return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         }
         catch(Exception e){
@@ -59,7 +48,7 @@ public class UserController {
             if(userDao.findByName(postedUser.getName())){
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
-            if(userDao.validateLogin(postedUser.getLogin())){
+            if(userDao.findByLogin(postedUser.getLogin())){
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
             if(!alreadyExists){

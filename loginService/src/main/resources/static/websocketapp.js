@@ -26,11 +26,4 @@ function disconnect() {
 //    $("#greetings").append("<tr><td>" + message + "</td></tr>");
 //}
 
-$(function () {
-//    $("form").on('submit', function (e) {
-//        e.preventDefault();
-//    });
-    $( "#sign-in" ).click(function() { connect(); });
-//    $( "#disconnect" ).click(function() { disconnect(); });
-//    $( "#send" ).click(function() { sendName(); });
-});
+//TODO: onLoad connect()
