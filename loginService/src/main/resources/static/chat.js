@@ -7,5 +7,5 @@
 
 function loadChatMenu(){
 //    $("#content-div").html("");
-    $("#content-div").load("chatMenu.html");
+    $("#content-div").load("chatContent.html");
 }

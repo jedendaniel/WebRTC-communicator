@@ -3,7 +3,7 @@ $(function () {
 });
 
 function loadHomeContent(){
-    $("#content-div").load("home.html");
+    $("#content-div").load("homeContent.html");
 }
 
 function logout(){
