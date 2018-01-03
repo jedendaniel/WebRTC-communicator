@@ -1,3 +1,5 @@
+var stompClient = null;
+
 $(function () {
     $(document).ready(function() { loadHomeContent(); });
 });

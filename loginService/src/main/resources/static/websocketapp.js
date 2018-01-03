@@ -1,14 +1,24 @@
 var stompClient = null;
 
+
+$(function () {
+    connect();
+});
+
 function connect() {
     var socket = new SockJS('/gs-guide-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-//        stompClient.subscribe('/topic/greetings', function (greeting) {
-//            showGreeting(JSON.parse(greeting.body).content);
-//        });
+        stompClient.subscribe('/websocket/messages', function (response) {
+            alert("Response: " + response);
+        });
     });
+    sendMessage("login", localStorage.getItem("login"));
+}
+
+function sendMessage(type, data) {
+    stompClient.send("/app/message", {}, JSON.stringify({'type': type, 'data': data}));
 }
 
 function disconnect() {
