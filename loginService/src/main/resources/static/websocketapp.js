@@ -10,15 +10,18 @@ function connect() {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/websocket/messages', function (response) {
-            alert("Response: " + response);
-        });
+            stompClient.subscribe('/client/response', function (greeting) {
+                alert(JSON.parse(greeting.body).content);
+            });
     });
-    sendMessage("login", localStorage.getItem("login"));
 }
 
 function sendMessage(type, data) {
-    stompClient.send("/app/message", {}, JSON.stringify({'type': type, 'data': data}));
+    var data = {
+        login: "test",
+        password: "test",
+    };
+    stompClient.send("/server/answer", {}, JSON.stringify({'type': type, 'data': JSON.stringify(data)}));
 }
 
 function disconnect() {
@@ -28,9 +31,13 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-//function sendName() {
-//    stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
-//}
+function sendName() {
+//    var user = {
+//        login: "test",
+//        password: "test",
+//    };
+    stompClient.send("/app/hello", {}, JSON.stringify({'type': "test"}));
+}
 //
 //function showGreeting(message) {
 //    $("#greetings").append("<tr><td>" + message + "</td></tr>");
