@@ -48,7 +48,7 @@ public class UserController {
             if(userDao.findByName(postedUser.getName())){
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
-            if(userDao.findByLogin(postedUser.getLogin())){
+            if(userDao.findByLogin(postedUser.getLogin()) == null){
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
             if(!alreadyExists){
