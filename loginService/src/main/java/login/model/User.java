@@ -36,6 +36,12 @@ public class User {
         this.password = password;
     }
 
+    public User(User user){
+        this.name = user.getName();
+        this.login = user.getLogin();
+        this.password = user.getPassword();
+    }
+
     public long getId() {
         return id;
     }
