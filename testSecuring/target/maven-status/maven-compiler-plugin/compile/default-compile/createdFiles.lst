@@ -1,0 +1,6 @@
+com\concretepage\service\UserService.class
+com\concretepage\dao\UserDAO.class
+com\concretepage\service\IUserService.class
+com\concretepage\entity\User.class
+com\concretepage\controller\UserController.class
+com\concretepage\dao\IUserDAO.class
