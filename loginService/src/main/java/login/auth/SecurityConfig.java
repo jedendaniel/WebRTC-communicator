@@ -27,9 +27,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/**").hasAnyRole("ADMIN","USER")
-                .and().httpBasic().realmName("MY APP REALM")
-                .authenticationEntryPoint(appAuthenticationEntryPoint);
+                    .antMatchers("/api/**").hasAnyRole("ADMIN","USER")
+//                    .antMatchers("/login").hasAnyRole("ADMIN","USER")
+                .and()
+                .httpBasic().realmName("MY APP REALM")
+                    .authenticationEntryPoint(appAuthenticationEntryPoint)
+                .and()
+                .formLogin()
+                    .loginPage("/login")
+                    .permitAll()
+                .and()
+                .logout()
+                    .permitAll();
     }
 
     @Autowired
