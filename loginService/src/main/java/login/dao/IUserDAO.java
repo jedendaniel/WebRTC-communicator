@@ -22,18 +22,22 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 @Transactional
-public interface IUserDAO extends JpaRepository<User, Long> {
+public interface IUserDAO {
 
-    @Query("SELECT case when (count(u) > 0)  then true else false end FROM User u WHERE u.name = ?1")
-    public boolean findByName(String name);
+//    @Query("SELECT case when (count(u) > 0)  then true else false end FROM User u WHERE u.name = ?1")
+//    public boolean findByName(String name);
+//
+////    @Query("SELECT case when (count(u) > 0)  then true else false end FROM User u WHERE u.login = ?1")
+////    public boolean findByLogin(String login);
+//
+//    @Query("SELECT u FROM User u WHERE u.login = ?1")
+//    public User findByUsername(String username);
+//
+//    @Query("SELECT u FROM User u WHERE u.login = ?1 AND u.password = ?2")
+//    public User validateUser(String login, String password);
 
-//    @Query("SELECT case when (count(u) > 0)  then true else false end FROM User u WHERE u.login = ?1")
-//    public boolean findByLogin(String login);
-
-    @Query("SELECT case when (count(u) > 0)  then true else false end FROM User u WHERE u.login = ?1")
-    public User findByLogin(String login);
-
-    @Query("SELECT u FROM User u WHERE u.login = ?1 AND u.password = ?2")
-    public User validateUser(String login, String password);
-
+    List<User> getAllUsers();
+    void addUser(User user);
+    boolean userExists(String login);
+    User getUserByLogin(String login);
 }
