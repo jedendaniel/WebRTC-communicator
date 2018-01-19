@@ -60,10 +60,11 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) DEFAULT NULL,
-  `password` varchar(30) DEFAULT NULL,
+  `password` varchar(60) DEFAULT NULL,
   `login` varchar(30) DEFAULT NULL,
+  `role` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -72,7 +73,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'musicbrandon','lala-laland','brandonbandon@mamail.ll'),(2,'eldoradoJACK','dddfldskeen','JACKtheCAPTAIN@onet.pl'),(3,'bob','asd','bob@qwe.pl'),(4,'anre','marynarz','andre@marynarz.oc');
+INSERT INTO `user` VALUES (1,'musicbrandon','lala-laland','brandonbandon@mamail.ll','ROLE_USER'),(2,'eldoradoJACK','dddfldskeen','JACKtheCAPTAIN@onet.pl','ROLE_USER'),(9,'Mukesh Sharma','$2a$10$N0eqNiuikWCy9ETQ1rdau.XEELcyEO7kukkfoiNISk/9F7gw6eB0W','mukesh','ROLE USER'),(10,'Tarun Singh','$2a$10$N0eqNiuikWCy9ETQ1rdau.XEELcyEO7kukkfoiNISk/9F7gw6eB0W','tarun','ROLE_USER'),(12,'name','$2a$10$xhYKagL52p5/2FteBDBNSuKmOVE1c5sZCz0c3QduhY6gdUOFJE5fa','login','ROLE_USER');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -85,4 +86,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-01-01 14:34:31
+-- Dump completed on 2018-01-19 14:17:01
