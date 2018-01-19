@@ -25,30 +25,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AppAuthenticationEntryPoint appAuthenticationEntryPoint;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable()
+//        http
 //                .authorizeRequests()
-//                    .antMatchers("/api/**").hasAnyRole("ADMIN","USER")
-//                .and()
-//                .httpBasic().realmName("MY APP REALM")
-//                    .authenticationEntryPoint(appAuthenticationEntryPoint)
-//                .and()
-//                .formLogin()
-//                    .loginPage("/test")
-//                    .permitAll()
-//                .and()
-//                .logout()
-//                    .permitAll();
-        http
+//                .anyRequest().authenticated();
+        http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/home").permitAll()
-                .anyRequest().authenticated()
+                    .antMatchers("/api/**").hasAnyRole("ADMIN","USER")
+                .and()
+                    .authorizeRequests()
+                    .anyRequest().authenticated()
+                .and()
+                .httpBasic().realmName("MY APP REALM")
+                    .authenticationEntryPoint(appAuthenticationEntryPoint)
                 .and()
                 .formLogin()
-                .loginPage("/login")
-                .permitAll()
+                    .loginPage("/index.html")
+                    .permitAll()
                 .and()
                 .logout()
-                .permitAll();
+                    .permitAll();
+//        http
+//                .authorizeRequests()
+//                .antMatchers("/", "/static/**").permitAll()
+//                .anyRequest().authenticated()
+//                .and()
+//                .formLogin()
+//                .loginPage("/login")
+//                .permitAll()
+//                .and()
+//                .logout()
+//                .permitAll();
     }
 
     @Autowired

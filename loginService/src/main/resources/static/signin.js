@@ -24,12 +24,15 @@ $(function() {
             $.ajax({
                 contentType: "application/json; charset=utf-8",
                 type: 'GET',
-                url: 'http://localhost:8090/api/users?login=' +
-                    $('#login').val() + '&password=' + $('#password').val(),
+//                url: 'http://localhost:8090/api/users?login=' +
+//                    $('#login').val() + '&password=' + $('#password').val(),
+                url: 'http://' + $('#login').val() + ':' + $('#password').val() + '@localhost:8090/main.html',
+//                username: $('#login').val(),
+//                 password: $('#password').val(),
                 //data: JSON.stringify(user),
                 success: function(response) {
                     localStorage.setItem("login", $("#login").val());
-                    window.location.href = "http://localhost:8090/home.html";
+                    window.location.href = "http://qwe:qwe@localhost:8090/main.html";
                 },
                 error: function() {
                     alert('Wrong login or password :/');

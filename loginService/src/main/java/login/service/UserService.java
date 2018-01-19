@@ -23,6 +23,7 @@ public class UserService implements IUserService {
             return false;
         }
         else{
+
             userDAO.addUser(user);
             return true;
         }

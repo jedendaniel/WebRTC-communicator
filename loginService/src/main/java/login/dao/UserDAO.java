@@ -1,6 +1,7 @@
 package login.dao;
 
 import login.model.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public void addUser(User user) {
+        user.setPassword(crypt(user.getPassword()));
         entityManager.persist(user);
     }
 
@@ -44,5 +46,8 @@ public class UserDAO implements IUserDAO {
         return user;
     }
 
-
+    private String crypt(String password){
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.encode(password);
+    }
 }
