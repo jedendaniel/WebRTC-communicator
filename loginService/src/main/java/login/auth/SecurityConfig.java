@@ -25,20 +25,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AppAuthenticationEntryPoint appAuthenticationEntryPoint;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+//        http.csrf().disable()
+//                .authorizeRequests()
+//                    .antMatchers("/api/**").hasAnyRole("ADMIN","USER")
+//                .and()
+//                .httpBasic().realmName("MY APP REALM")
+//                    .authenticationEntryPoint(appAuthenticationEntryPoint)
+//                .and()
+//                .formLogin()
+//                    .loginPage("/test")
+//                    .permitAll()
+//                .and()
+//                .logout()
+//                    .permitAll();
+        http
                 .authorizeRequests()
-                    .antMatchers("/api/**").hasAnyRole("ADMIN","USER")
-//                    .antMatchers("/login").hasAnyRole("ADMIN","USER")
-                .and()
-                .httpBasic().realmName("MY APP REALM")
-                    .authenticationEntryPoint(appAuthenticationEntryPoint)
+                .antMatchers("/", "/home").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                    .loginPage("/login")
-                    .permitAll()
+                .loginPage("/login")
+                .permitAll()
                 .and()
                 .logout()
-                    .permitAll();
+                .permitAll();
     }
 
     @Autowired
