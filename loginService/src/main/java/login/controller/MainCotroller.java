@@ -20,8 +20,8 @@
 ////                "<a href='http://google.com</a> :)";
 ////    }
 ////
-////    @RequestMapping(value = "/login", method = RequestMethod.POST)
-////    public ResponseEntity<Void> login(){
-////        return new ResponseEntity<Void>(HttpStatus.OK);
-////    }
+//    @RequestMapping(value = "/auth/login", method = RequestMethod.POST)
+//    public ResponseEntity<Void> login(){
+//        return new ResponseEntity<Void>(HttpStatus.OK);
+//    }
 //}

@@ -25,36 +25,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AppAuthenticationEntryPoint appAuthenticationEntryPoint;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests()
-//                .anyRequest().authenticated();
         http.csrf().disable()
                 .authorizeRequests()
                     .antMatchers("/api/**").hasAnyRole("ADMIN","USER")
                 .and()
                     .authorizeRequests()
+                    .antMatchers("/","/index.html").permitAll()
+                .and()
+                    .authorizeRequests()
                     .anyRequest().authenticated()
                 .and()
-                .httpBasic().realmName("MY APP REALM")
-                    .authenticationEntryPoint(appAuthenticationEntryPoint)
-                .and()
-                .formLogin()
-                    .loginPage("/index.html")
-                    .permitAll()
-                .and()
-                .logout()
-                    .permitAll();
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/", "/static/**").permitAll()
-//                .anyRequest().authenticated()
+                .httpBasic().realmName("webrtcapi")
+                    .authenticationEntryPoint(appAuthenticationEntryPoint);
 //                .and()
 //                .formLogin()
-//                .loginPage("/login")
-//                .permitAll()
+//                    .loginPage("/login.html")
+//                    .defaultSuccessUrl("/main.html")
+//                    .failureUrl("/login.html")
+//                    .permitAll()
 //                .and()
 //                .logout()
-//                .permitAll();
+//                    .permitAll();
     }
 
     @Autowired
