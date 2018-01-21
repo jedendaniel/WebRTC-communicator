@@ -1,27 +1,33 @@
 var stompClient = null;
 
-
-$(function () {
-    connect();
-});
-
 function connect() {
     var socket = new SockJS('/gs-guide-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-            stompClient.subscribe('/client/response', function (greeting) {
-                alert(JSON.parse(greeting.body).content);
+            stompClient.subscribe('/topic/response', function (response) {
+                alert(JSON.parse(response.body).content);
+            });
+            stompClient.subscribe('/user/queue/messages', function(message) {
+                alert(JSON.parse(message.body).content);
             });
     });
 }
 
-function sendMessage(type, data) {
-    var data = {
-        login: "test",
-        password: "test",
-    };
-    stompClient.send("/server/answer", {}, JSON.stringify({'type': type, 'data': JSON.stringify(data)}));
+function sendMessage() {
+    var recipient = document.getElementById("chatFriend").value;
+    var recipient2 = $('#chatFriend').value;
+    stompClient.send("/app/chat", {}, JSON.stringify({
+        'type': "test",
+        'recipient': recipient,
+        'message' : JSON.stringify({'m':"message"})
+      }));
+
+//    var data = {
+//        login: "test",
+//        password: "test",
+//    };
+//    stompClient.send("/app/message", {}, JSON.stringify({'type': "type", 'data': JSON.stringify(data)}));
 }
 
 function disconnect() {
@@ -36,11 +42,15 @@ function sendName() {
 //        login: "test",
 //        password: "test",
 //    };
-    stompClient.send("/app/hello", {}, JSON.stringify({'type': "test"}));
+    stompClient.send("/app/message", {}, JSON.stringify({'type': "test"}));
 }
 //
 //function showGreeting(message) {
 //    $("#greetings").append("<tr><td>" + message + "</td></tr>");
 //}
 
-//TODO: onLoad connect()
+//$(function () {
+//    $( "#connect" ).click(connect());
+////    $( "#disconnect" ).click(function() { disconnect(); });
+//    $( "#send" ).click(sendMessage());
+//});
