@@ -16,12 +16,16 @@ function connect() {
 
 function sendMessage() {
     var recipient = document.getElementById("chatFriend").value;
-    var recipient2 = $('#chatFriend').value;
-    stompClient.send("/app/chat", {}, JSON.stringify({
-        'type': "test",
-        'recipient': recipient,
-        'message' : JSON.stringify({'m':"message"})
-      }));
+    var message = JSON.stringify({
+                        'm':"message",
+                        'e':"dlsaksa"
+                        });
+    var data = JSON.stringify({
+                       'type': "test",
+                       'recipient': recipient,
+                       'message' :message
+                       });
+    stompClient.send("/app/chat", {}, data);
 
 //    var data = {
 //        login: "test",

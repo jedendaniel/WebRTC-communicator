@@ -51,3 +51,22 @@ li a:hover:not(.active) {
 .active {
     background-color: #4CAF50;
 }
+
+    video {
+        background: rgb(0, 0, 0);
+        border: 1px solid gray;
+    }
+
+
+#localVideo {
+    width: 140px;
+    height: 100px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+#remoteVideo {
+    width: 500px;
+    height: 500px;
+}
