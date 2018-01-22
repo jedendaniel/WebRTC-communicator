@@ -3,14 +3,16 @@ package login.websocket;
 public class ClientMessage {
     String type;
     String recipient;
+    String sender;
     Object data;
 
     public ClientMessage() {
     }
 
-    public ClientMessage(String type, String recipient, Object data) {
+    public ClientMessage(String type, String recipient, String sender, Object data) {
         this.type = type;
         this.recipient = recipient;
+        this.sender = sender;
         this.data = data;
     }
 
@@ -28,6 +30,14 @@ public class ClientMessage {
 
     public void setRecipient(String recipient) {
         this.recipient = recipient;
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
     public Object getData() {

@@ -35,14 +35,25 @@ public class MessageController {
     @MessageMapping("/chat")
 //    @SendTo("/topic/response")
     public void onMessage(Message<Object> message, @Payload ClientMessage chatMessage) throws Exception {
+
         Principal principal = message.getHeaders().get(SimpMessageHeaderAccessor.USER_HEADER, Principal.class);
         String authedSender = principal.getName();
-//        chatMessage.setSender(authedSender);
         String recipient = chatMessage.getRecipient();
-//        if (!authedSender.equals(recipient)) {
-//            template.convertAndSendToUser(authedSender, "/queue/messages", chatMessage);
-//        }
 
+//        switch (chatMessage.type){
+//            case "login":
+//                break;
+//            case "offer":
+//                break;
+//            case "answer":
+//                break;
+//            case "candidate":
+//                break;
+//            case "leave":
+//                break;
+//            default:
+//                // Command not found.
+//        }
         template.convertAndSendToUser(recipient, "/queue/messages", chatMessage);
     }
 }
