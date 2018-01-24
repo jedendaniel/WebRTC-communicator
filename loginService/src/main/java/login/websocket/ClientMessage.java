@@ -4,12 +4,12 @@ public class ClientMessage {
     String type;
     String recipient;
     String sender;
-    Object data;
+    String data;
 
     public ClientMessage() {
     }
 
-    public ClientMessage(String type, String recipient, String sender, Object data) {
+    public ClientMessage(String type, String recipient, String sender, String data) {
         this.type = type;
         this.recipient = recipient;
         this.sender = sender;
@@ -40,11 +40,11 @@ public class ClientMessage {
         this.sender = sender;
     }
 
-    public Object getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(String data) {
         this.data = data;
     }
 }

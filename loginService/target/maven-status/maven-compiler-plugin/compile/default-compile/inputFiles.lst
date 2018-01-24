@@ -14,6 +14,7 @@ C:\Users\D\git\WebRTC-communicator\loginService\src\main\java\login\websocket\Me
 C:\Users\D\git\WebRTC-communicator\loginService\src\main\java\login\websocket\WebSocketConfig.java
 C:\Users\D\git\WebRTC-communicator\loginService\src\main\java\login\model\Relation.java
 C:\Users\D\git\WebRTC-communicator\loginService\src\main\java\login\service\IUserService.java
+C:\Users\D\git\WebRTC-communicator\loginService\src\main\java\login\MvcConfig.java
 C:\Users\D\git\WebRTC-communicator\loginService\src\main\java\login\controller\UserController.java
 C:\Users\D\git\WebRTC-communicator\loginService\src\main\java\login\model\RelationStatus.java
 C:\Users\D\git\WebRTC-communicator\loginService\src\main\java\login\model\User.java

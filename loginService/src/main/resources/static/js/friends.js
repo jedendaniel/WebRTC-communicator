@@ -1,0 +1,3 @@
+function setupFriendsContent() {
+    // load tables
+}

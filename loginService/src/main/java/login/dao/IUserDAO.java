@@ -21,6 +21,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+//TODO: add some
+
 @Transactional
 public interface IUserDAO {
 
@@ -37,7 +39,9 @@ public interface IUserDAO {
 //    public User validateUser(String login, String password);
 
     List<User> getAllUsers();
-    void addUser(User user);
-    boolean userExists(String login);
     User getUserByLogin(String login);
+    boolean userExists(String login);
+    void addUser(User user);
+    void updateUser(User user);
+    void deleteUser(User user);
 }

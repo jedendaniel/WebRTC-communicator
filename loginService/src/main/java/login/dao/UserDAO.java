@@ -23,12 +23,6 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public void addUser(User user) {
-        user.setPassword(crypt(user.getPassword()));
-        entityManager.persist(user);
-    }
-
-    @Override
     public boolean userExists(String login) {
         String hql = "FROM User as usr WHERE usr.login = ?";
         int count = entityManager.createQuery(hql).setParameter(1,login).getResultList().size();
@@ -45,6 +39,23 @@ public class UserDAO implements IUserDAO {
         }
         return user;
     }
+
+    @Override
+    public void addUser(User user) {
+        user.setPassword(crypt(user.getPassword()));
+        entityManager.persist(user);
+    }
+
+    @Override
+    public void updateUser(User user) {
+
+    }
+
+    @Override
+    public void deleteUser(User user) {
+
+    }
+
 
     private String crypt(String password){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
