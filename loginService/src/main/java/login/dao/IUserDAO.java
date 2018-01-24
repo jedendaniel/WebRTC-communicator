@@ -39,8 +39,8 @@ public interface IUserDAO {
 //    public User validateUser(String login, String password);
 
     List<User> getAllUsers();
-    User getUserByLogin(String login);
-    boolean userExists(String login);
+    User getUser(User user);
+    boolean userExists(User user);
     void addUser(User user);
     void updateUser(User user);
     void deleteUser(User user);

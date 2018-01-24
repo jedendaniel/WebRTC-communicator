@@ -29,6 +29,20 @@ public class UserController {
         return new ResponseEntity<List<User>>(list,HttpStatus.OK);
     }
 
+    @RequestMapping(value = "user", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<User> getUser(@RequestParam(value="name", required = false) String name, @RequestParam(value="login", required = false) String login){
+        User user = new User();
+        user.setName(name);
+        user.setLogin(login);
+        user = userService.getUser(user);
+        if(user != null){
+            return new ResponseEntity<User>(user,HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @RequestMapping(value = "users", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity<Void> addUser(@RequestBody User postedUser){
         boolean flag = userService.addUser(postedUser);
@@ -36,5 +50,23 @@ public class UserController {
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         }
         return new ResponseEntity<Void>(HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "users", method = RequestMethod.PATCH, consumes = "application/json")
+    public ResponseEntity<Void> updateUser(@RequestBody User[] user){
+        boolean flag = userService.updateUser(user[0], user[1]);
+        if(flag == false){
+            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "users", method = RequestMethod.DELETE, consumes = "application/json")
+    public ResponseEntity<Void> deleteUser(@RequestBody User postedUser){
+        boolean flag = userService.deleteUser(postedUser);
+        if(flag == false){
+            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 }

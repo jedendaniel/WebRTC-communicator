@@ -20,7 +20,9 @@ public class MyAppUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        login.model.User user = userDAO.getUserByLogin(s);
+        login.model.User user = new User();
+        user.setLogin(s);
+        user = userDAO.getUser(user);
         GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole());
         UserDetails userDetails = (UserDetails)new org.springframework.security.core.userdetails.User(
                 user.getLogin(),user.getPassword(), Arrays.asList(authority));

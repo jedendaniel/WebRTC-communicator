@@ -23,17 +23,20 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public boolean userExists(String login) {
-        String hql = "FROM User as usr WHERE usr.login = ?";
-        int count = entityManager.createQuery(hql).setParameter(1,login).getResultList().size();
+    public boolean userExists(User user) {
+        String hql = "FROM User as usr WHERE (usr.login = ? or usr.name = ?)";
+        int count = entityManager.createQuery(hql)
+                .setParameter(1,user.getLogin())
+                .setParameter(2,user.getName()).getResultList().size();
         return count > 0 ? true : false;
     }
 
     @Override
-    public User getUserByLogin(String login) {
-        User user = new User();
-        String hql = "SELECT usr FROM User usr WHERE login = ?";
-        List<?> list = entityManager.createQuery(hql).setParameter(1,login).getResultList();
+    public User getUser(User user) {
+        String hql = "SELECT usr FROM User usr WHERE (login = ? or name = ?)";
+        List<?> list = entityManager.createQuery(hql)
+                .setParameter(1,user.getLogin())
+                .setParameter(2,user.getName()).getResultList();
         if(!list.isEmpty()){
             user = (User)list.get(0);
         }
@@ -42,23 +45,16 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public void addUser(User user) {
-        user.setPassword(crypt(user.getPassword()));
         entityManager.persist(user);
     }
 
     @Override
     public void updateUser(User user) {
-
+        entityManager.merge(user);
     }
 
     @Override
     public void deleteUser(User user) {
-
-    }
-
-
-    private String crypt(String password){
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        return encoder.encode(password);
+        entityManager.remove(user);
     }
 }
