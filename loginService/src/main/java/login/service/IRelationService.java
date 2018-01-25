@@ -10,12 +10,13 @@ import java.util.List;
 public interface IRelationService {
 
     @Secured({"ROLE_ADMIN", "ROLE_USER"})
-    public List<Relation> getAllUserRelations(User user);
+    public List<Relation> getAllUserRelations(String login);
     @Secured({"ROLE_ADMIN", "ROLE_USER"})
     public List<Relation> getUserRelationsByStatus(User user, RelationStatus relationStatus);
     @Secured({"ROLE_ADMIN", "ROLE_USER"})
     public Relation getRelation(Relation relation);
-
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
+    public Relation getRelation(String name1, String name2);
     @Secured({"ROLE_ADMIN", "ROLE_USER"})
     public boolean addRelation(Relation relation);
     @Secured({"ROLE_ADMIN", "ROLE_USER"})

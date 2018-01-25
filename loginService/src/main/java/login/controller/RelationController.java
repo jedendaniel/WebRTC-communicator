@@ -18,22 +18,16 @@ public class RelationController {
     @Autowired
     private IRelationService relationService;
 
-    @RequestMapping(value = "/relations", method = RequestMethod.GET, produces = "application/json", consumes = "application/json")
+    @RequestMapping(value = "/relations", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public ResponseEntity<List<Relation>> getAllUserRelations(@RequestBody User user) {
+    public ResponseEntity<List<Relation>> getAllUserRelations(@RequestParam(value = "user") String user) {
         return new ResponseEntity<List<Relation>>(relationService.getAllUserRelations(user), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/relations/{status}", method = RequestMethod.GET, produces = "application/json", consumes = "application/json")
+    @RequestMapping(value = "/relation", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public ResponseEntity<List<Relation>> getUserRelationsByStatus(@RequestBody User user, @RequestParam("status") RelationStatus relationStatus){
-        return new ResponseEntity<List<Relation>>(relationService.getUserRelationsByStatus(user, relationStatus), HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/relation", method = RequestMethod.GET, produces = "application/json", consumes = "application/json")
-    @ResponseBody
-    public ResponseEntity<Relation> getRelation(@RequestBody Relation relation){
-        return new ResponseEntity<Relation>(relationService.getRelation(relation), HttpStatus.OK);
+    public ResponseEntity<Relation> getRelation(@RequestParam(value = "user1") String user1, @RequestParam(value = "user2") String user2){
+        return new ResponseEntity<Relation>(relationService.getRelation(user1, user2), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/relations", method = RequestMethod.POST, consumes = "application/json")
@@ -43,11 +37,11 @@ public class RelationController {
             return new ResponseEntity<Void>(HttpStatus.OK);
         }
         else{
-            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @RequestMapping(value = "/relations", method = RequestMethod.PUT, consumes = "application/json")
+    @RequestMapping(value = "/relations", method = RequestMethod.PATCH, consumes = "application/json")
     @ResponseBody
     public ResponseEntity<Void> updateRelation(@RequestBody Relation relation){
         if(relationService.updateRelation(relation)){

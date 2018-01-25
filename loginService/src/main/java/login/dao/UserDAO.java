@@ -39,8 +39,9 @@ public class UserDAO implements IUserDAO {
                 .setParameter(2,user.getName()).getResultList();
         if(!list.isEmpty()){
             user = (User)list.get(0);
+            return user;
         }
-        return user;
+        return null;
     }
 
     @Override
