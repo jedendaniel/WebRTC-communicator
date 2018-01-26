@@ -11,9 +11,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-//TODO: do the stuff !add, update, delete means only what it means, not any check or whatever!
-//TODO: test queries (fields names and syntax)
-
 @Repository
 public class RelationDAO implements IRelationDAO {
     @PersistenceContext

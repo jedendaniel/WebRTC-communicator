@@ -23,12 +23,12 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
+    background-color: #555;
 }
 
 li {
     float: left;
-    border-right:1px solid #bbb;
+    border-right: 1px solid #bbb;
 }
 
 li:last-child {
@@ -52,11 +52,10 @@ li a:hover:not(.active) {
     background-color: #4CAF50;
 }
 
-    video {
-        background: rgb(0, 0, 0);
-        border: 1px solid gray;
-    }
-
+video {
+    background: rgb(0, 0, 0);
+    border: 1px solid gray;
+}
 
 #localVideo {
     width: 140px;
@@ -69,4 +68,9 @@ li a:hover:not(.active) {
 #remoteVideo {
     width: 500px;
     height: 500px;
+}
+
+table,
+td {
+    border: 1px solid black;
 }

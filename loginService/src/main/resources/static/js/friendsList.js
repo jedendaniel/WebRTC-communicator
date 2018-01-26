@@ -3,14 +3,7 @@ var deleteImg = "../images/delete.bmp";
 var talkImg = "../images/talk.bmp";
 var blockImg = "../images/block.bmp";
 
-function displayFriendsList() {
-    getUserNames();
-    var friendsList = document.getElementById("friendsList");
-    usersNames.forEach(element => {
-        createFriendButton(friendsList, element);
-        createFriendActionPanel(friendsList);
-    });
-}
+getUserNames();
 
 function createFriendButton(list, username) {
     var friendBlock = document.createElement('button');
@@ -60,12 +53,30 @@ function fillFriendsTable() {
     }
 }
 
-function createFriendElement(username) {
-
+function getUserNames() {
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8090/api/relations?user=' + "asd",
+        success: function(response) {
+            usersNames = response;
+            displayFriendsList();
+        },
+        error: function() {
+            alert('friend list error :(');
+        }
+    });
 }
 
-function getUserNames() {
-    for (i = 0; i < 10; i++) {
-        usersNames.push("user " + i);
-    }
+function displayFriendsList() {
+    var friendsList = document.getElementById("friendsList");
+    usersNames.forEach(element => {
+        if (element.status1 === "FRIENDS")
+            if (element.usr1Id.name === "asd") {
+                createFriendButton(friendsList, element.usr2Id.name);
+                createFriendActionPanel(friendsList);
+            } else if (element.usr2Id.name === "asd") {
+            createFriendButton(friendsList, element.usr1Id.name);
+            createFriendActionPanel(friendsList);
+        }
+    });
 }

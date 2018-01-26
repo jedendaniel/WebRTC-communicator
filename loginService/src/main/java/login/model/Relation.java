@@ -35,6 +35,14 @@ public class Relation {
         this.status2 = status2;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return id;
+    }
+
     public User getUsr1Id() {
         return usr1Id;
     }

@@ -37,7 +37,7 @@ CREATE TABLE `relation` (
   `status1` int(2) unsigned NOT NULL,
   `status2` int(2) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +46,7 @@ CREATE TABLE `relation` (
 
 LOCK TABLES `relation` WRITE;
 /*!40000 ALTER TABLE `relation` DISABLE KEYS */;
-INSERT INTO `relation` VALUES (1,1,2,1,1);
+INSERT INTO `relation` VALUES (1,17,12,2,2),(2,16,17,0,3),(3,18,17,2,2),(4,16,18,0,1),(5,16,12,2,2),(12,17,28,0,1);
 /*!40000 ALTER TABLE `relation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -64,7 +64,7 @@ CREATE TABLE `user` (
   `login` varchar(30) DEFAULT NULL,
   `role` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,7 +73,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'musicbrandon','lala-laland','brandonbandon@mamail.ll','ROLE_USER'),(2,'eldoradoJACK','dddfldskeen','JACKtheCAPTAIN@onet.pl','ROLE_USER'),(9,'Mukesh Sharma','$2a$10$N0eqNiuikWCy9ETQ1rdau.XEELcyEO7kukkfoiNISk/9F7gw6eB0W','mukesh','ROLE USER'),(10,'Tarun Singh','$2a$10$N0eqNiuikWCy9ETQ1rdau.XEELcyEO7kukkfoiNISk/9F7gw6eB0W','tarun','ROLE_USER'),(12,'name','$2a$10$xhYKagL52p5/2FteBDBNSuKmOVE1c5sZCz0c3QduhY6gdUOFJE5fa','login','ROLE_USER');
+INSERT INTO `user` VALUES (12,'name','$2a$10$xhYKagL52p5/2FteBDBNSuKmOVE1c5sZCz0c3QduhY6gdUOFJE5fa','login','ROLE_USER'),(16,'qwe','$2a$10$O5u3.N03HgPNUM43g8l0a.e1rHgx2aDIfMS/QU9fqPsHZf8lUTgdS','qwe','ROLE_USER'),(17,'asd','$2a$10$q2Yl9n1QZvCYlCp9XwhwPuX3/LI0f69J.oJTO8RmQm4VVBTym3YTe','asd','ROLE_USER'),(18,'zxc','$2a$10$Cc.p2TEbXf9F4BwFMXOg9u5nvLo7Vcg/1KyhELxH23JMTCro7DXGi','zxc','ROLE_USER'),(26,'dd','$2a$10$S5a1ylqdtstHQ41HOFr9TOVB3FwyCjVKmbjjauVJp7Difo6ctqePi','dd','ROLE_USER'),(28,'qaz','$2a$10$OG.rqABO1vHiEUgS.XxeDOFZWrPCcaoB9fvlel9rJ.bhIK5ACsi2W','qaz','ROLE_USER');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -86,4 +86,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-01-19 14:17:01
+-- Dump completed on 2018-01-26 15:24:53

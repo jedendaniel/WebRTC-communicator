@@ -27,10 +27,10 @@ function setupAccountContent() {
     newLoginMessage = document.getElementById("newLoginMessage");
     newNameMessage = document.getElementById("newNameMessage");
 
-    changeLoginBtn.addEventListener('click', function() { changeLogin() });
-    changeNameBtn.addEventListener('click', function() { changeName() });
-    changePasswordBtn.addEventListener('click', function() { changePassword() });
-    changeAllBtn.addEventListener('click', function() { changeAll() });
+    changeLoginBtn.addEventListener('click', function() { validateLogin() });
+    changeNameBtn.addEventListener('click', function() { validateName() });
+    changePasswordBtn.addEventListener('click', function() { validatePassword() });
+    changeAllBtn.addEventListener('click', function() { validateAll() });
 }
 
 function validatePassword() {
@@ -75,28 +75,26 @@ function changePassword() {
 };
 
 function changeLogin() {
-    if (validateLogin() === true) {
-        var patchData = [{
-                login: "asd"
-            },
-            {
-                login: newLogin.value
-            }
-        ];
-        $.ajax({
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            type: 'PATCH',
-            url: 'http://localhost:8090/api/users',
-            data: JSON.stringify(patchData),
-            success: function() {
-                alert('Account has been updated :)');
-            },
-            error: function() {
-                alert('error :(');
-            }
-        });
-    }
+    var patchData = [{
+            login: "asd"
+        },
+        {
+            login: newLogin.value
+        }
+    ];
+    $.ajax({
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        type: 'PATCH',
+        url: 'http://localhost:8090/api/users',
+        data: JSON.stringify(patchData),
+        success: function() {
+            alert('Account has been updated :)');
+        },
+        error: function() {
+            alert('error :(');
+        }
+    });
 };
 
 function validateLogin() {
@@ -115,34 +113,33 @@ function validateLogin() {
         },
         error: function() {
             newLoginMessage.innerText = " ";
+            changeLogin();
         }
     });
     return true;
 };
 
 function changeName() {
-    if (validateName() === true) {
-        var patchData = [{
-                login: "asd"
-            },
-            {
-                name: newName.value
-            }
-        ];
-        $.ajax({
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            type: 'PATCH',
-            url: 'http://localhost:8090/api/users',
-            data: JSON.stringify(patchData),
-            success: function() {
-                alert('Account has been updated :)');
-            },
-            error: function() {
-                alert('error :(');
-            }
-        });
-    }
+    var patchData = [{
+            login: "asd"
+        },
+        {
+            name: newName.value
+        }
+    ];
+    $.ajax({
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        type: 'PATCH',
+        url: 'http://localhost:8090/api/users',
+        data: JSON.stringify(patchData),
+        success: function() {
+            alert('Account has been updated :)');
+        },
+        error: function() {
+            alert('error :(');
+        }
+    });
 };
 
 function validateName() {
@@ -161,30 +158,35 @@ function validateName() {
         },
         error: function() {
             newNameMessage.innerText = " ";
+            changeName();
         }
     });
     return true;
 };
 
+function validateAll() {
+    validateName();
+    validateLogin();
+    validatePassword();
+}
+
 function changeAll() {
-    if (validateName() === true && validateLogin() === true && validatePassword() === true) {
-        var patchData = {
-            name: newName,
-            login: newLogin,
-            password: newPassword1
-        };
-        $.ajax({
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            type: 'PATCH',
-            url: 'http://localhost:8090/api/users',
-            data: JSON.stringify(patchData),
-            success: function() {
-                alert('Account has been updated :)');
-            },
-            error: function() {
-                alert('error :(');
-            }
-        });
-    }
+    var patchData = {
+        name: newName,
+        login: newLogin,
+        password: newPassword1
+    };
+    $.ajax({
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        type: 'PATCH',
+        url: 'http://localhost:8090/api/users',
+        data: JSON.stringify(patchData),
+        success: function() {
+            alert('Account has been updated :)');
+        },
+        error: function() {
+            alert('error :(');
+        }
+    });
 };
