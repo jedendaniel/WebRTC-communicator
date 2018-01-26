@@ -27,8 +27,8 @@ function setupAccountContent() {
     newLoginMessage = document.getElementById("newLoginMessage");
     newNameMessage = document.getElementById("newNameMessage");
 
-    changeLoginBtn.addEventListener('click', function() { validateLogin() });
-    changeNameBtn.addEventListener('click', function() { validateName() });
+    changeLoginBtn.addEventListener('click', function() { validateLogin(true) });
+    changeNameBtn.addEventListener('click', function() { validateName(true) });
     changePasswordBtn.addEventListener('click', function() { validatePassword() });
     changeAllBtn.addEventListener('click', function() { validateAll() });
 }
@@ -62,7 +62,7 @@ function changePassword() {
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             type: 'PATCH',
-            url: 'http://localhost:8090/api/users',
+            url: 'http://localhost:8090/api/auth/users',
             data: JSON.stringify(patchData),
             success: function() {
                 alert('Account has been updated :)');
@@ -86,7 +86,7 @@ function changeLogin() {
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         type: 'PATCH',
-        url: 'http://localhost:8090/api/users',
+        url: 'http://localhost:8090/api/auth/users',
         data: JSON.stringify(patchData),
         success: function() {
             alert('Account has been updated :)');
@@ -97,7 +97,7 @@ function changeLogin() {
     });
 };
 
-function validateLogin() {
+function validateLogin(one) {
     if (newLogin.value === "") {
         newLoginMessage.innerText = "Field cannot be empty!";
         return false;
@@ -106,14 +106,14 @@ function validateLogin() {
     }
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:8090/api/user?login=' + newLogin.value,
+        url: 'http://localhost:8090/api/auth/user?login=' + newLogin.value,
         success: function() {
             newLoginMessage.innerText = "Login is already in use";
             return false;
         },
         error: function() {
             newLoginMessage.innerText = " ";
-            changeLogin();
+            if (one) changeLogin();
         }
     });
     return true;
@@ -131,7 +131,7 @@ function changeName() {
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         type: 'PATCH',
-        url: 'http://localhost:8090/api/users',
+        url: 'http://localhost:8090/api/auth/users',
         data: JSON.stringify(patchData),
         success: function() {
             alert('Account has been updated :)');
@@ -142,7 +142,7 @@ function changeName() {
     });
 };
 
-function validateName() {
+function validateName(one) {
     if (newName.value === "") {
         newNameMessage.innerText = "Field cannot be empty!";
         return false;
@@ -151,23 +151,23 @@ function validateName() {
     }
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:8090/api/user?name=' + newName.value,
+        url: 'http://localhost:8090/api/auth/user?name=' + newName.value,
         success: function() {
             newNameMessage.innerText = "Name is already in use";
             return false;
         },
         error: function() {
             newNameMessage.innerText = " ";
-            changeName();
+            if (one) changeName();
         }
     });
     return true;
 };
 
 function validateAll() {
-    validateName();
-    validateLogin();
-    validatePassword();
+    if ((validateName(false) + validateLogin(false) + validatePassword()) === 3) {
+        changeAll();
+    }
 }
 
 function changeAll() {
@@ -180,7 +180,7 @@ function changeAll() {
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         type: 'PATCH',
-        url: 'http://localhost:8090/api/users',
+        url: 'http://localhost:8090/api/auth/users',
         data: JSON.stringify(patchData),
         success: function() {
             alert('Account has been updated :)');

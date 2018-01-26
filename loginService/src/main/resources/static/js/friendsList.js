@@ -56,7 +56,7 @@ function fillFriendsTable() {
 function getUserNames() {
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:8090/api/relations?user=' + "asd",
+        url: 'http://localhost:8090/api/auth/relations?user=' + "asd",
         success: function(response) {
             usersNames = response;
             displayFriendsList();

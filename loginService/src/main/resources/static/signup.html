@@ -2,7 +2,7 @@
 <html>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="signup.js"></script>
+<script src="/js/signup.js"></script>
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script> -->
 
 <head>
@@ -13,7 +13,7 @@
 
 <body>
 
-<!-- <div>
+    <!-- <div>
     <h1>Create account</h1>
     <p id="p01">Provide account details</p>
     <form id="newAccForm">
@@ -27,15 +27,25 @@
         <a href="index.html">Back to login page</a>
 </div> -->
 
-<div>
-    <h1>Create account</h1>
-    <p id="p01">Provide account details</p>
-    <p>Login: <input type="text" id="login"></p>
-    <p>Password: <input type="text" id="password"></p>
-    <p>Name: <input type="text" id="name"></p>
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-    <button id="create-user">Create</button>
-</div>
+    <div>
+        <h1>Create account</h1>
+        Name:
+        <br><input type="text" id="name">
+        <p id="nameMessage" style="color:red"></p>
+        <br>
+        <br> Login:
+        <br><input type="text" id="login">
+        <p id="loginMessage" style="color:red"></p>
+        <br> Password:
+        <br><input type="text" id="password1">
+        <br><input type="text" id="password2">
+        <p id="notEqualPswd" style="color:red"></p>
+        <p id="emptyPswd" style="color:red"></p>
+        <br>
+        <button id="createUser">Create</button>
+        <br><br>
+        <a href="index.html">Back to login page</a>
+    </div>
 </body>
 
 </html>

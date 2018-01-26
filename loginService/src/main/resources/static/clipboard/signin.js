@@ -24,7 +24,7 @@ $(function() {
             $.ajax({
                 contentType: "application/json; charset=utf-8",
                 type: 'GET',
-//                url: 'http://localhost:8090/api/users?login=' +
+//                url: 'http://localhost:8090/api/auth/users?login=' +
 //                    $('#login').val() + '&password=' + $('#password').val(),
                 url: 'http://' + $('#login').val() + ':' + $('#password').val() + '@localhost:8090/main.html',
 //                username: $('#login').val(),

@@ -27,13 +27,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/api/**").hasAnyRole("ADMIN","USER")
-                .and()
-                    .authorizeRequests()
-                    .antMatchers("/","/index.html").permitAll()
-                .and()
-                    .authorizeRequests()
-                    .anyRequest().authenticated()
+                    .antMatchers("/", "/index.html", "/signup.html", "/js/signup.js", "/api/noauth/**").permitAll() //
+//                    .anyRequest().authenticated()
+                    .antMatchers("/api/auth/**").hasAnyRole("ADMIN","USER")
+//                .and()
+//                    .authorizeRequests()
+//                    .antMatchers("/index.html", "/signup.html").permitAll()
+//                .and()
+//                    .authorizeRequests()
+//                    .anyRequest().authenticated()
                 .and()
                 .httpBasic().realmName("webrtcapi")
                     .authenticationEntryPoint(appAuthenticationEntryPoint);
