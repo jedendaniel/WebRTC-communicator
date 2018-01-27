@@ -22,7 +22,12 @@
                 <li id="talkMenu"><a href="#" onclick="loadTalkContent()">Talk</a></li>
                 <li id="friendsMenu"><a href="#" onclick="loadFriendsContent()">Friends</a></li>
                 <li><a href="#" onclick="loadAboutContent()">About</a></li>
-                <li style="float:right;background-color:#d0d0d0"><a style="color:#404040" href="#" onclick="logout()">Logout</a></li>
+                <li style="float:right;background-color:#d0d0d0">
+                    <!-- <a style="color:#404040" href="#" onclick="logout()">Logout</a> -->
+                    <form action="/logout" method="post">
+                        <input style="color:#363636" id="logout" type="submit" value="Sign Out" />
+                    </form>
+                </li>
             </ul>
         </div>
         <br>
@@ -33,6 +38,7 @@
             </div>
         </div>
     </div>
+
 </body>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

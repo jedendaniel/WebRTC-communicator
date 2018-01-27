@@ -16,7 +16,7 @@ function connect() {
     remoteVideo = document.getElementById('remoteVideo');
     //sender = localStorage.getItem("login");
     if (navigator.userAgent.indexOf("Chrome") != -1) {
-        sender = "asd";
+        sender = localStorage.getItem("login");
         navigator.webkitGetUserMedia({ video: true, audio: true }, function(myStream) {
             initConnection(myStream)
         }, function(error) {

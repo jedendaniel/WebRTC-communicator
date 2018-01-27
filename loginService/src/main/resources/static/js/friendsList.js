@@ -56,7 +56,7 @@ function fillFriendsTable() {
 function getUserNames() {
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:8090/api/auth/relations?user=' + "asd",
+        url: 'http://localhost:8090/api/auth/relations?user=' + localStorage.getItem("login"),
         success: function(response) {
             usersNames = response;
             displayFriendsList();
@@ -71,10 +71,10 @@ function displayFriendsList() {
     var friendsList = document.getElementById("friendsList");
     usersNames.forEach(element => {
         if (element.status1 === "FRIENDS")
-            if (element.usr1Id.name === "asd") {
+            if (element.usr1Id.name === localStorage.getItem("login")) {
                 createFriendButton(friendsList, element.usr2Id.name);
                 createFriendActionPanel(friendsList);
-            } else if (element.usr2Id.name === "asd") {
+            } else if (element.usr2Id.name === localStorage.getItem("login")) {
             createFriendButton(friendsList, element.usr1Id.name);
             createFriendActionPanel(friendsList);
         }

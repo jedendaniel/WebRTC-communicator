@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 
@@ -27,9 +28,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/", "/index.html", "/signup.html", "/js/signup.js", "/api/noauth/**").permitAll() //
+//                    .antMatchers("/", "/index.html", "/signup.html", "/js/signup.js", "/api/noauth/**", "/login.html", "/login.js").permitAll() //
 //                    .anyRequest().authenticated()
-                    .antMatchers("/api/auth/**").hasAnyRole("ADMIN","USER")
+                    .antMatchers("/", "/home").permitAll()
+                    .antMatchers("/**", "/api/auth/**").hasAnyRole("ADMIN","USER")
 //                .and()
 //                    .authorizeRequests()
 //                    .antMatchers("/index.html", "/signup.html").permitAll()
@@ -37,17 +39,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                    .authorizeRequests()
 //                    .anyRequest().authenticated()
                 .and()
-                .httpBasic().realmName("webrtcapi")
-                    .authenticationEntryPoint(appAuthenticationEntryPoint);
+                .formLogin()
+                .loginPage("/login")
+                .permitAll()
+//                .and()
+//                .httpBasic().realmName("webrtcapi")
+//                    .authenticationEntryPoint(appAuthenticationEntryPoint);
 //                .and()
 //                .formLogin()
 //                    .loginPage("/login.html")
 //                    .defaultSuccessUrl("/main.html")
 //                    .failureUrl("/login.html")
 //                    .permitAll()
-//                .and()
-//                .logout()
-//                    .permitAll();
+                .and()
+//                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//                .logoutSuccessUrl("/").deleteCookies("JSESSIONID")
+//                .invalidateHttpSession(true)
+                .logout()
+                    .permitAll();
     }
 
     @Autowired

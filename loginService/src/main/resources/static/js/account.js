@@ -52,7 +52,7 @@ function validatePassword() {
 function changePassword() {
     if (validatePassword() === true) {
         var patchData = [{
-                login: "asd"
+                login: localStorage.getItem("login")
             },
             {
                 password: newPassword1
@@ -76,7 +76,7 @@ function changePassword() {
 
 function changeLogin() {
     var patchData = [{
-            login: "asd"
+            login: localStorage.getItem("login")
         },
         {
             login: newLogin.value
@@ -121,7 +121,7 @@ function validateLogin(one) {
 
 function changeName() {
     var patchData = [{
-            login: "asd"
+            login: localStorage.getItem("login")
         },
         {
             name: newName.value

@@ -32,18 +32,25 @@ function loadAboutContent() {
 }
 
 function logout() {
-    localStorage.removeItem("login");
-    window.location.href = "http://localhost:8090/index.html";
+    //     document.cookie = encodeURIComponent("JSESSIONID") + "=deleted; expires=" + new Date(0).toUTCString();
+    // //    $.cookie('JSESSIONID', null, {path: '/'});
+    // //    localStorage.removeItem("JSESSIONID");
+    // document.cookie = "JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+//    $.ajax({
+//        type: 'POST',
+//        url: 'http://localhost:8090/logout'
+//    });
+//    window.location.href = "http://localhost:8090/";
 }
 
 function checkNotifications() {
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:8090/api/auth/relations?user=' + "asd",
+        url: 'http://localhost:8090/api/auth/relations?user=' + localStorage.getItem("login"),
         success: function(response) {
             var i = 0;
             response.forEach(function(element) {
-                if (element.status2 === "PENDING" && element.usr2Id.name === "asd") {
+                if (element.status2 === "PENDING" && element.usr2Id.name === localStorage.getItem("login")) {
                     i++;
                 }
             }, this);
