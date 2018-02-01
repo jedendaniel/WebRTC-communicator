@@ -37,7 +37,7 @@ public class RelationDAO implements IRelationDAO {
     @Override
     public Relation getRelation(Relation relation) {
         Relation rel = new Relation();
-        String hql = "SELECT rel FROM Relation rel WHERE (usr1Id = ? and usr2Id = ?) or (usr2Id = ? and usr1Id = ?)";
+        String hql = "FROM Relation as rel WHERE (rel.usr1Id = ? and rel.usr2Id = ?) or (rel.usr1Id = ? and rel.usr2Id = ?)";
         List<?> list = entityManager.createQuery(hql)
                 .setParameter(1,relation.getUsr1Id())
                 .setParameter(2,relation.getUsr2Id())

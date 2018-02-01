@@ -36,6 +36,7 @@ public class MessageController {
 //    @SendTo("/topic/response")
     public void onMessage(Message<Object> message, @Payload ClientMessage chatMessage) throws Exception {
 
+        Thread.sleep(100); // simulated delay
         Principal principal = message.getHeaders().get(SimpMessageHeaderAccessor.USER_HEADER, Principal.class);
         String authedSender = principal.getName();
         String recipient = chatMessage.getRecipient();
