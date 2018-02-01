@@ -7,14 +7,16 @@ var sender = localStorage.getItem("login");
 var yourConn;
 var dataChannel;
 
+var init;
+
 function setRecipient(name) {
     recipient = name;
 }
 
-function connect() {
+function setupConnection() {
     localVideo = document.getElementById('localVideo');
     remoteVideo = document.getElementById('remoteVideo');
-    //sender = localStorage.getItem("login");
+    sender = localStorage.getItem("login");
     if (navigator.userAgent.indexOf("Chrome") != -1) {
         sender = localStorage.getItem("login");
         navigator.webkitGetUserMedia({ video: true, audio: true }, function(myStream) {
@@ -34,28 +36,19 @@ function connect() {
 
 function initConnection(myStream) {
     stream = myStream;
-
-    //displaying local video stream on the page
     localVideo.src = window.URL.createObjectURL(stream);
 
-    //using Google public stun server
     var configuration = {
         "iceServers": [{ "url": "stun:stun2.1.google.com:19302" }]
     };
-
     yourConn = new webkitRTCPeerConnection(configuration);
     console.log("RTCPeerConnection object was created");
-    console.log(yourConn);
-
-    // setup stream listening
     yourConn.addStream(stream);
 
-    //when a remote user adds stream to the peer connection, we display it
     yourConn.onaddstream = function(e) {
         remoteVideo.src = window.URL.createObjectURL(e.stream);
     };
 
-    // Setup ice handling
     yourConn.onicecandidate = function(event) {
         if (event.candidate) {
             sendMessage({
@@ -66,9 +59,9 @@ function initConnection(myStream) {
             });
         }
     };
-    yourConn.oniceconnectionstatechange = e => console.log(yourConn.iceConnectionState);
-    yourConn.ondatachannel = function(ev) {
-        dataChannel = ev.channel;
+    // yourConn.oniceconnectionstatechange = e => console.log(yourConn.iceConnectionState);
+    yourConn.ondatachannel = function(event) {
+        dataChannel = event.channel;
         console.log('Data channel is created!');
         dataChannel.onerror = function(error) {
             console.log("Error:", error);
@@ -78,6 +71,12 @@ function initConnection(myStream) {
             console.log("channel opened");
         };
     }
+
+    if (init) {
+        sendInvitation();
+    } else {
+        acceptInvitation();
+    }
 }
 
 function onInitError(error) {
@@ -86,7 +85,6 @@ function onInitError(error) {
 
 function sendMessage(message) {
     stompClient.send("/app/chat", {}, JSON.stringify(message));
-    //    stompClient.send("/app/message", {}, JSON.stringify({'type': "type", 'data': JSON.stringify(data)}));
 }
 
 function sendOffer() {
@@ -98,6 +96,7 @@ function sendOffer() {
             sender: sender,
             data: JSON.stringify(offer)
         });
+        yourConn.setLocalDescription(offer);
     }, function(error) {
         alert("Error when creating an offer");
     });
@@ -112,35 +111,6 @@ function disconnect() {
     }
 }
 
-function onMessage(message) {
-    console.log("Got message", message.body);
-    var msg = JSON.parse(message.body);
-    var data = JSON.parse(msg.data);
-
-    switch (msg.type) {
-        // case "login":
-        //     //            handleLogin(data.success);
-        //     handleLogin(true);
-        //     break;
-        //when somebody wants to call us
-        case "offer":
-            handleOffer(data);
-            break;
-        case "answer":
-            handleAnswer(data);
-            break;
-            //when a remote peer sends an ice candidate to us
-        case "candidate":
-            handleCandidate(data);
-            break;
-        case "leave":
-            disconnect();
-            break;
-        default:
-            break;
-    }
-};
-
 function handleOffer(offer) {
     yourConn.setRemoteDescription(new RTCSessionDescription(offer));
 
@@ -151,7 +121,7 @@ function handleOffer(offer) {
             type: "answer",
             recipient: recipient,
             sender: sender,
-            data: JSON.stringify({ answer })
+            data: JSON.stringify(answer)
         });
     }, function(error) {
         alert("Error when creating an answer");

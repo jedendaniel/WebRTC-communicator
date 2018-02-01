@@ -3,10 +3,18 @@ function setupTalkContent() {
 }
 
 function startVideoTalk() {
+    setRecipient(document.getElementById("talkFriend").value);
     $("#content-div").html("");
     $("#content-div").load("videoTalk.html", function() {
-        setRecipient($("#talkFriend").value);
-        connect();
-        initConnection();
+        init = true;
+        setupConnection();
+    });
+}
+
+function acceptVideoTalk() {
+    $("#content-div").html("");
+    $("#content-div").load("videoTalk.html", function() {
+        init = false;
+        setupConnection();
     });
 }
