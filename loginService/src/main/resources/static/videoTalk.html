@@ -1,4 +1,12 @@
-<div style="width:500px;heigth:500px">
-    <video id="localVideo" autoplay></video>
+<div style="float:left;width:600px;padding-top:50px">
     <video id="remoteVideo" autoplay></video>
+    <video id="localVideo" autoplay></video>
+</div>
+
+<div style="float:left;padding:50px">
+    <textarea readonly id="chatArea" style="width:180px;height: 100px;resize: none;"></textarea>
+    <br>
+    <textarea id="newChatMessage" style="width:180px;height: 40px;resize: none;"></textarea>
+    <br>
+    <button id="sendChatMessageBtn" onclick="sendChatMessage()">send</button>
 </div>

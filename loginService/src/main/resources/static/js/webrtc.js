@@ -1,5 +1,7 @@
 var localVideo;
 var remoteVideo;
+var chatArea;
+var newChatMessage;
 
 var recipient;
 var sender = localStorage.getItem("login");
@@ -16,6 +18,8 @@ function setRecipient(name) {
 function setupConnection() {
     localVideo = document.getElementById('localVideo');
     remoteVideo = document.getElementById('remoteVideo');
+    chatArea = document.getElementById('chatArea');
+    newChatMessage = document.getElementById('newChatMessage');
     sender = localStorage.getItem("login");
     if (navigator.userAgent.indexOf("Chrome") != -1) {
         sender = localStorage.getItem("login");
@@ -41,7 +45,7 @@ function initConnection(myStream) {
     var configuration = {
         "iceServers": [{ "url": "stun:stun2.1.google.com:19302" }]
     };
-    yourConn = new webkitRTCPeerConnection(configuration);
+    yourConn = new webkitRTCPeerConnection(configuration, { optional: [{ RtcDataChannels: true }] });
     console.log("RTCPeerConnection object was created");
     yourConn.addStream(stream);
 
@@ -51,7 +55,7 @@ function initConnection(myStream) {
 
     yourConn.onicecandidate = function(event) {
         if (event.candidate) {
-            sendMessage({
+            sendWebSocketMessage({
                 type: "candidate",
                 recipient: recipient,
                 sender: sender,
@@ -59,22 +63,23 @@ function initConnection(myStream) {
             });
         }
     };
-    // yourConn.oniceconnectionstatechange = e => console.log(yourConn.iceConnectionState);
-    yourConn.ondatachannel = function(event) {
-        dataChannel = event.channel;
-        console.log('Data channel is created!');
-        dataChannel.onerror = function(error) {
-            console.log("Error:", error);
-        };
-        dataChannel.onmessage = handleMessage;
-        dataChannel.onopen = function() {
-            console.log("channel opened");
-        };
-    }
 
     if (init) {
+        dataChannel = yourConn.createDataChannel("myDataChannel", { reliable: true });
+        dataChannel.onmessage = handleChatMessage;
         sendInvitation();
     } else {
+        yourConn.ondatachannel = function(event) {
+            dataChannel = event.channel;
+            console.log('Data channel created!');
+            dataChannel.onerror = function(error) {
+                console.log("Error:", error);
+            };
+            dataChannel.onmessage = handleChatMessage;
+            dataChannel.onopen = function() {
+                console.log("channel opened");
+            };
+        }
         acceptInvitation();
     }
 }
@@ -83,14 +88,14 @@ function onInitError(error) {
     console.log(error);
 }
 
-function sendMessage(message) {
+function sendWebSocketMessage(message) {
     stompClient.send("/app/chat", {}, JSON.stringify(message));
 }
 
 function sendOffer() {
     yourConn.createOffer(function(offer) {
         // openDataChannel();
-        sendMessage({
+        sendWebSocketMessage({
             type: "offer",
             recipient: recipient,
             sender: sender,
@@ -117,7 +122,7 @@ function handleOffer(offer) {
     //create an answer to an offer 
     yourConn.createAnswer(function(answer) {
         yourConn.setLocalDescription(answer);
-        sendMessage({
+        sendWebSocketMessage({
             type: "answer",
             recipient: recipient,
             sender: sender,
@@ -139,3 +144,13 @@ function handleCandidate(candidate) {
     yourConn.addIceCandidate(new RTCIceCandidate(candidate));
     console.log("candidate added");
 };
+
+function sendChatMessage() {
+    dataChannel.send(newChatMessage.value);
+    chatArea.value += "\n" + sender + ": " + newChatMessage.value;
+    newChatMessage.value = "";
+}
+
+function handleChatMessage() {
+    chatArea.value += "\n" + recipient + ": " + event.data;
+}

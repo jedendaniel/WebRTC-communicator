@@ -48,7 +48,7 @@ function confirmBox() {
     if (confirm("accept")) {
         acceptVideoTalk();
     } else {
-        sendMessage({
+        sendWebSocketMessage({
             type: "invitationRejected",
             recipient: recipient,
             sender: sender,
@@ -58,7 +58,7 @@ function confirmBox() {
 }
 
 function acceptInvitation() {
-    sendMessage({
+    sendWebSocketMessage({
         type: "invitationAccepted",
         recipient: recipient,
         sender: sender,
@@ -67,7 +67,7 @@ function acceptInvitation() {
 }
 
 function sendInvitation() {
-    sendMessage({
+    sendWebSocketMessage({
         type: "invitationSent",
         recipient: recipient,
         sender: sender,

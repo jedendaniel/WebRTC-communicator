@@ -67,16 +67,17 @@ video {
 }
 
 #localVideo {
-    width: 140px;
-    height: 100px;
-    /* position: absolute;
-    top: 15px;
-    right: 15px; */
+    width: 160px;
+    height: 120px;
+    border-style: solid;
+    border-color: #bbb;
+    position: fixed;
 }
 
 #remoteVideo {
-    width: 500px;
-    height: 500px;
+    width: 600px;
+    height: 460px;
+    position: fixed;
 }
 
 table,
