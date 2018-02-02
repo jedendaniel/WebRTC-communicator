@@ -3,6 +3,9 @@ var remoteVideo;
 var chatArea;
 var newChatMessage;
 
+var files = [];
+var blob;
+
 var recipient;
 var sender = localStorage.getItem("login");
 
@@ -152,5 +155,46 @@ function sendChatMessage() {
 }
 
 function handleChatMessage() {
-    chatArea.value += "\n" + recipient + ": " + event.data;
+    if (typeof event.data === 'string') {
+        chatArea.value += "\n" + recipient + ": " + event.data;
+        return;
+        // new File([new Uint8Array(event.data)]);
+    }
+    // blob = new Blob([new Uint8Array(event.data)]);
+    // new Flie([])
+}
+
+function sendFiles() {
+    var i = 0;
+    var reader = new FileReader();
+    var CHUNK_LEN = 64000;
+    var binaryFiles = [];
+    reader.onloadend = function() {
+        binaryFiles.push(reader.result);
+        if (i < files.length) {
+            binaryFiles.push(reader.readAsBinaryString(files[i]));
+            i++;
+        } else {
+            for (i = 0; i < binaryFiles.length; i++) {
+                var len = binaryFiles[i].length;
+                var numChunks = binaryFiles[i].length / CHUNK_LEN;
+                var n = binaryFiles[i].length / CHUNK_LEN;
+
+                for (i = 0; i < n; i++) {
+                    var start = i * CHUNK_LEN;
+                    var end = (i + 1) * CHUNK_LEN;
+                    dataChannel.send(binaryFiles[i].substring(start, end));
+                }
+                if (len % CHUNK_LEN) {
+                    dataChannel.send(binaryFiles[i].substring(n * CHUNK_LEN));
+                }
+                dataChannel.send(binaryFiles[i]);
+            }
+        }
+    }
+    if (files.length > 0) {
+        reader.readAsArrayBuffer(files[i]);
+        // reader.readAsBinaryString();
+        i++;
+    }
 }

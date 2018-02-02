@@ -75,8 +75,8 @@ video {
 }
 
 #remoteVideo {
-    width: 600px;
-    height: 460px;
+    width: 100px;
+    height: 160px;
     position: fixed;
 }
 
