@@ -57,6 +57,48 @@ function onGroupMessage(message) {
                     data: null
                 });
                 break;
+            case "leftGroup":
+                if (sender !== recipient) {
+                    yourConn = connectionsGroup[recipient];
+                    disconnect();
+                    document.getElementById("videoDiv").removeChild(videosGroup[recipient]);
+                    delete connectionsGroup[recipient];
+                    delete videosGroup[recipient];
+                } else {
+                    for (var key in connectionsGroup) {
+                        yourConn = connectionsGroup[key];
+                        disconnect();
+                    }
+                }
+                break;
         }
     }
+}
+
+function disconnectFromGroup() {
+    stompClient.subscribe('/topic/group/' + groupName);
+    sendWebSocketGroupMessage(
+        '/app/group/' + groupName, {
+            type: 'leftGroup',
+            recipient: null,
+            sender: sender,
+            data: null
+        }
+    )
+    groupName = null;
+    for (var key in connectionsGroup) {
+        yourConn = connectionsGroup[key];
+        disconnect();
+    }
+    stream.getTracks().forEach(element => {
+        element.stop();
+    });
+    // var track = stream.getTracks()[0];
+    // track.stop();
+    connectionsGroup = {};
+    videosGroup = {};
+    localVideo = null;
+    singleMode = null;
+    init = null;
+    location.reload();
 }

@@ -44,7 +44,7 @@ function onMessage(message) {
             handleCandidate(JSON.parse(msg.data));
             break;
         case "leave":
-            disconnect();
+            clearTalk();
             break;
         case "groupInvitation":
             groupConfirmBox(msg);
@@ -103,4 +103,19 @@ function groupConfirmBox(msg) {
             data: null
         });
     }
+}
+
+function clearTalk() {
+    yourConn = connectionsGroup[recipient];
+    disconnect();
+    stream.getTracks().forEach(element => {
+        element.stop();
+    });
+    delete connectionsGroup[recipient];
+    remoteVideo = null;
+    localVideo = null;
+    singleMode = null;
+    init = null;
+    recipient = null;
+    location.reload();
 }

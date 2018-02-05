@@ -4,6 +4,17 @@ $(function() {
     $(document).ready(function() {
         loadHomeContent();
         displayFriendsList();
+        groupName = null;
+        for (var key in connectionsGroup) {
+            yourConn = connectionsGroup[key];
+            disconnect();
+        }
+        connectionsGroup = {};
+        videosGroup = {};
+        remoteVideo = null;
+        localVideo = null;
+        singleMode = null;
+        init = null;
     });
 });
 
@@ -19,7 +30,7 @@ function loadAccountContent() {
 
 function loadTalkContent() {
     $("#content-div").html("");
-    $("#content-div").load("talkContent.html", function() { setupTalkContent(); });
+    setupTalkContent();
 }
 
 function loadFriendsContent() {
@@ -36,11 +47,11 @@ function logout() {
     // //    $.cookie('JSESSIONID', null, {path: '/'});
     // //    localStorage.removeItem("JSESSIONID");
     // document.cookie = "JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-//    $.ajax({
-//        type: 'POST',
-//        url: 'http://localhost:8090/logout'
-//    });
-//    window.location.href = "http://localhost:8090/";
+    //    $.ajax({
+    //        type: 'POST',
+    //        url: 'http://localhost:8090/logout'
+    //    });
+    //    window.location.href = "http://localhost:8090/";
 }
 
 function checkNotifications() {

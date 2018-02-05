@@ -1,5 +1,23 @@
 function setupTalkContent() {
-    // TODO: things like names sugestions or checking if user or group exist.
+    if (remoteVideo !== null) {
+        $("#content-div").html("");
+        $("#content-div").load("videoTalk.html", function() {
+            document.getElementById("remoteVideo").src = remoteVideo.src;
+            document.getElementById("localVideo").src = localVideo.src;
+        });
+    } else {
+        if (Object.keys(connectionsGroup).length > 0) {
+            $("#content-div").html("");
+            $("#content-div").load("groupTalk.html", function() {
+                for (var key in videosGroup) {
+                    document.getElementById("videoDiv").appendChild(videosGroup[key]);
+                }
+                document.getElementById("localVideo").src = localVideo.src;
+            });
+        } else {
+            $("#content-div").load("talkContent.html");
+        }
+    }
 }
 
 function startVideoTalk() {
@@ -33,4 +51,14 @@ function handleFileSelect(evt) {
             f.size, '</li>');
     }
     document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+}
+
+function disconnectFromTalk() {
+    sendWebSocketMessage({
+        type: "leave",
+        recipient: recipient,
+        sender: sender,
+        data: null
+    });
+    clearTalk();
 }

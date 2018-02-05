@@ -81,7 +81,7 @@ function initConnection(myStream) {
         connectionsGroup[recipient].ondatachannel = function(event) {
             dataChannelsGroup[recipient] = event.channel;
             console.log('Data channel created!');
-            dataChannel.onerror = function(error) {
+            dataChannelsGroup[recipient].onerror = function(error) {
                 console.log("Error:", error);
             };
             dataChannelsGroup[recipient].onmessage = handleChatMessage;
@@ -101,7 +101,6 @@ function onInitError(error) {
 
 function sendOffer() {
     yourConn.createOffer(function(offer) {
-        // openDataChannel();
         sendWebSocketMessage({
             type: "offer",
             recipient: recipient,
@@ -153,7 +152,7 @@ function handleCandidate(candidate) {
 };
 
 function sendChatMessage() {
-    dataChannel.send(newChatMessage.value);
+    connectionsGroup[recipient].send(newChatMessage.value);
     chatArea.value += "\n" + sender + ": " + newChatMessage.value;
     newChatMessage.value = "";
 }
@@ -187,12 +186,12 @@ function sendFiles() {
                 for (i = 0; i < n; i++) {
                     var start = i * CHUNK_LEN;
                     var end = (i + 1) * CHUNK_LEN;
-                    dataChannel.send(binaryFiles[i].substring(start, end));
+                    connectionsGroup[recipient].send(binaryFiles[i].substring(start, end));
                 }
                 if (len % CHUNK_LEN) {
-                    dataChannel.send(binaryFiles[i].substring(n * CHUNK_LEN));
+                    connectionsGroup[recipient].send(binaryFiles[i].substring(n * CHUNK_LEN));
                 }
-                dataChannel.send(binaryFiles[i]);
+                connectionsGroup[recipient].send(binaryFiles[i]);
             }
         }
     }

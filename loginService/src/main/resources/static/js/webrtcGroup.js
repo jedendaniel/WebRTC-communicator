@@ -19,6 +19,7 @@ function setRecipient(name) {
 function setupGroupConnection() {
     localVideo = document.getElementById('localVideo');
     var newVideo = document.createElement('video');
+    newVideo.className += " remoteVideo";
     document.getElementById("videoDiv").appendChild(newVideo);
     videosGroup[recipient] = newVideo;
     chatArea = document.getElementById('chatArea');
@@ -78,7 +79,7 @@ function initGroupConnection(myStream) {
         connectionsGroup[recipient].ondatachannel = function(event) {
             dataChannelsGroup[recipient] = event.channel;
             console.log('Data channel created!');
-            dataChannel.onerror = function(error) {
+            dataChannelsGroup[recipient].onerror = function(error) {
                 console.log("Error:", error);
             };
             dataChannelsGroup[recipient].onmessage = handleGroupMessage;
