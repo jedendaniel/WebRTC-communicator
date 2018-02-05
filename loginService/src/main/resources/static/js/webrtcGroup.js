@@ -72,7 +72,7 @@ function initGroupConnection(myStream) {
 
     if (init) {
         dataChannelsGroup[recipient] = connectionsGroup[recipient].createDataChannel("myDataChannel", { reliable: true });
-        dataChannelsGroup.onmessage = handleChatMessage;
+        dataChannelsGroup[recipient].onmessage = handleGroupMessage;
         yourConn = connectionsGroup[recipient];
         sendOffer();
     } else {
@@ -90,10 +90,10 @@ function initGroupConnection(myStream) {
     }
 }
 
-function sendGroupMessage(channel) {
-    dataChannelsGroup.array.forEach(element => {
-        element.send(newChatMessage.value);
-    });
+function sendGroupMessage() {
+    for (var key in dataChannelsGroup) {
+        dataChannelsGroup[key].send(newChatMessage.value);
+    }
     chatArea.value += "\n" + sender + ": " + newChatMessage.value;
     newChatMessage.value = "";
 }

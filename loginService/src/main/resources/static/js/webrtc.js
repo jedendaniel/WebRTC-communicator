@@ -72,7 +72,7 @@ function initConnection(myStream) {
 
     if (init) {
         dataChannelsGroup[recipient] = connectionsGroup[recipient].createDataChannel("myDataChannel", { reliable: true });
-        dataChannelsGroup.onmessage = handleChatMessage;
+        dataChannelsGroup[recipient].onmessage = handleChatMessage;
         yourConn = connectionsGroup[recipient];
         if (singleMode) { sendInvitation(); } else {
 
@@ -152,7 +152,7 @@ function handleCandidate(candidate) {
 };
 
 function sendChatMessage() {
-    connectionsGroup[recipient].send(newChatMessage.value);
+    dataChannelsGroup[recipient].send(newChatMessage.value);
     chatArea.value += "\n" + sender + ": " + newChatMessage.value;
     newChatMessage.value = "";
 }
