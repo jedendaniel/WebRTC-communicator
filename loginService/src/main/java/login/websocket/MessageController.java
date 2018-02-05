@@ -3,6 +3,7 @@ package login.websocket;
 import javax.inject.Inject;
 
 import org.springframework.messaging.Message;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -28,7 +29,7 @@ public class MessageController {
     @MessageMapping("/message")
     @SendTo("/topic/response")
     public Response onMessage(ClientMessage message) throws Exception {
-        Thread.sleep(1000); // simulated delay
+        Thread.sleep(10000); // simulated delay
         return new Response("Hello, " + message.getType() + "\n" + message.getData() + "!");
     }
 
@@ -40,21 +41,12 @@ public class MessageController {
         Principal principal = message.getHeaders().get(SimpMessageHeaderAccessor.USER_HEADER, Principal.class);
         String authedSender = principal.getName();
         String recipient = chatMessage.getRecipient();
-
-//        switch (chatMessage.type){
-//            case "login":
-//                break;
-//            case "offer":
-//                break;
-//            case "answer":
-//                break;
-//            case "candidate":
-//                break;
-//            case "leave":
-//                break;
-//            default:
-//                // Command not found.
-//        }
         template.convertAndSendToUser(recipient, "/queue/messages", chatMessage);
+    }
+
+    @MessageMapping("/group/{groupName}")
+    public void simple(@DestinationVariable String groupName, @Payload ClientMessage chatMessage) throws InterruptedException {
+        Thread.sleep(100); // simulated delay;
+        template.convertAndSend("/topic/group/" + groupName, chatMessage);
     }
 }

@@ -75,9 +75,9 @@ video {
 }
 
 #remoteVideo {
-    width: 100px;
-    height: 160px;
-    position: fixed;
+    width: 500px;
+    height: 360px;
+    /* position: fixed; */
 }
 
 table,

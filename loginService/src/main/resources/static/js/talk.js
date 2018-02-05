@@ -6,6 +6,7 @@ function startVideoTalk() {
     setRecipient(document.getElementById("talkFriend").value);
     $("#content-div").html("");
     $("#content-div").load("videoTalk.html", function() {
+        singleMode = true;
         init = true;
         setupConnection();
         document.getElementById('files').addEventListener('change', handleFileSelect, false);
@@ -15,6 +16,7 @@ function startVideoTalk() {
 function acceptVideoTalk() {
     $("#content-div").html("");
     $("#content-div").load("videoTalk.html", function() {
+        singleMode = true;
         init = false;
         setupConnection();
         document.getElementById('files').addEventListener('change', handleFileSelect, false);

@@ -1,5 +1,5 @@
 var localVideo;
-var remoteVideo;
+var videosGroup = {};
 var chatArea;
 var newChatMessage;
 
@@ -9,41 +9,40 @@ var blob;
 var recipient;
 var sender = localStorage.getItem("login");
 
-var yourConn;
-var dataChannel;
-
-var init;
-var singleMode;
+var connectionsGroup = {};
+var dataChannelsGroup = {};
 
 function setRecipient(name) {
     recipient = name;
 }
 
-function setupConnection() {
+function setupGroupConnection() {
     localVideo = document.getElementById('localVideo');
-    remoteVideo = document.getElementById('remoteVideo');
-    videosGroup[recipient] = remoteVideo;
+    var newVideo = document.createElement('video');
+    document.getElementById("videoDiv").appendChild(newVideo);
+    videosGroup[recipient] = newVideo;
     chatArea = document.getElementById('chatArea');
     newChatMessage = document.getElementById('newChatMessage');
     sender = localStorage.getItem("login");
     if (navigator.userAgent.indexOf("Chrome") != -1) {
         sender = localStorage.getItem("login");
         navigator.webkitGetUserMedia({ video: true, audio: true }, function(myStream) {
-            initConnection(myStream)
+            initGroupConnection(myStream)
         }, function(error) {
             console.log(error);
         });
     } else if (navigator.userAgent.indexOf("Firefox") != -1) {
-        sender = "qwe";
+        sender = localStorage.getItem("login");
         navigator.mediaDevices.getUserMedia({ video: true, audio: true }, function(myStream) {
-            initConnection(myStream)
+            initGroupConnection(myStream)
         }, function(error) {
             console.log(error);
         });
     }
 }
 
-function initConnection(myStream) {
+function initGroupConnection(myStream) {
+    console.log("initGroupConnection");
     stream = myStream;
     localVideo.src = window.URL.createObjectURL(stream);
 
@@ -74,9 +73,7 @@ function initConnection(myStream) {
         dataChannelsGroup[recipient] = connectionsGroup[recipient].createDataChannel("myDataChannel", { reliable: true });
         dataChannelsGroup.onmessage = handleChatMessage;
         yourConn = connectionsGroup[recipient];
-        if (singleMode) { sendInvitation(); } else {
-
-        }
+        sendOffer();
     } else {
         connectionsGroup[recipient].ondatachannel = function(event) {
             dataChannelsGroup[recipient] = event.channel;
@@ -84,81 +81,23 @@ function initConnection(myStream) {
             dataChannel.onerror = function(error) {
                 console.log("Error:", error);
             };
-            dataChannelsGroup[recipient].onmessage = handleChatMessage;
+            dataChannelsGroup[recipient].onmessage = handleGroupMessage;
             dataChannelsGroup[recipient].onopen = function() {
                 console.log("channel opened");
             };
         }
-        if (singleMode) { acceptInvitation(); } else {
-
-        }
     }
 }
 
-function onInitError(error) {
-    console.log(error);
-}
-
-function sendOffer() {
-    yourConn.createOffer(function(offer) {
-        // openDataChannel();
-        sendWebSocketMessage({
-            type: "offer",
-            recipient: recipient,
-            sender: sender,
-            data: JSON.stringify(offer)
-        });
-        yourConn.setLocalDescription(offer);
-    }, function(error) {
-        alert("Error when creating an offer");
+function sendGroupMessage(channel) {
+    dataChannelsGroup.array.forEach(element => {
+        element.send(newChatMessage.value);
     });
-};
-
-function disconnect() {
-    yourConn.close();
-    yourConn.onicecandidate = null;
-    console.log("Disconnected");
-    if (stompClient !== null) {
-        stompClient.disconnect();
-    }
-}
-
-function handleOffer(offer) {
-    yourConn.setRemoteDescription(new RTCSessionDescription(offer));
-
-    //create an answer to an offer 
-    yourConn.createAnswer(function(answer) {
-        yourConn.setLocalDescription(answer);
-        sendWebSocketMessage({
-            type: "answer",
-            recipient: recipient,
-            sender: sender,
-            data: JSON.stringify(answer)
-        });
-    }, function(error) {
-        alert("Error when creating an answer");
-    });
-
-};
-
-//when we got an answer from a remote user 
-function handleAnswer(answer) {
-    yourConn.setRemoteDescription(new RTCSessionDescription(answer));
-};
-
-//when we got an ice candidate from a remote user 
-function handleCandidate(candidate) {
-    yourConn.addIceCandidate(new RTCIceCandidate(candidate));
-    console.log("candidate added");
-};
-
-function sendChatMessage() {
-    dataChannel.send(newChatMessage.value);
     chatArea.value += "\n" + sender + ": " + newChatMessage.value;
     newChatMessage.value = "";
 }
 
-function handleChatMessage() {
+function handleGroupMessage() {
     if (typeof event.data === 'string') {
         chatArea.value += "\n" + recipient + ": " + event.data;
         return;
@@ -187,12 +126,12 @@ function sendFiles() {
                 for (i = 0; i < n; i++) {
                     var start = i * CHUNK_LEN;
                     var end = (i + 1) * CHUNK_LEN;
-                    dataChannel.send(binaryFiles[i].substring(start, end));
+                    dataChannelsGroup[recipient].send(binaryFiles[i].substring(start, end));
                 }
                 if (len % CHUNK_LEN) {
-                    dataChannel.send(binaryFiles[i].substring(n * CHUNK_LEN));
+                    dataChannelsGroup[recipient].send(binaryFiles[i].substring(n * CHUNK_LEN));
                 }
-                dataChannel.send(binaryFiles[i]);
+                dataChannelsGroup[recipient].send(binaryFiles[i]);
             }
         }
     }
