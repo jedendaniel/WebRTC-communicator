@@ -1,24 +1,29 @@
-var newPassword1;
-var newPassword2;
-var changePasswordBtn;
-var newLogin;
-var changeLoginBtn;
-var newName;
-var changeNameBtn;
-var changeAllBtn;
+// var newPassword1;
+// var newPassword2;
+// var changePasswordBtn;
+// var newLogin;
+// var changeLoginBtn;
+// var newName;
+// var changeNameBtn;
+// var changeAllBtn;
 
-var notEqualPswd;
-var emptyPswd;
-var newLoginMessage;
-var newNameMessage;
+// var notEqualPswd;
+// var emptyPswd;
+// var newLoginMessage;
+// var newNameMessage;
+
+// var change;
+
+var message;
 
 function setupAccountContent() {
+    // change = true;
     newPassword1 = document.getElementById("newPassword1");
     newPassword2 = document.getElementById("newPassword2");
     changePasswordBtn = document.getElementById("changePassword");
     newLogin = document.getElementById("newLogin");
-    changeLoginBtn = document.getElementById("changeLogin");
     newName = document.getElementById("newName");
+    changeLoginBtn = document.getElementById("changeLogin");
     changeNameBtn = document.getElementById("changeName");
     changeAllBtn = document.getElementById("changeAll");
 
@@ -27,10 +32,10 @@ function setupAccountContent() {
     newLoginMessage = document.getElementById("newLoginMessage");
     newNameMessage = document.getElementById("newNameMessage");
 
-    changeLoginBtn.addEventListener('click', function() { validateLogin(true) });
-    changeNameBtn.addEventListener('click', function() { validateName(true) });
-    changePasswordBtn.addEventListener('click', function() { validatePassword() });
-    changeAllBtn.addEventListener('click', function() { validateAll() });
+    // changeLoginBtn.addEventListener('click', function() { validateLogin(true) });
+    // changeNameBtn.addEventListener('click', function() { validateName(true) });
+    // changePasswordBtn.addEventListener('click', function() { validatePassword(true) });
+    // changeAllBtn.addEventListener('click', function() { validatePassword(false) });
 }
 
 function validatePassword() {
@@ -45,12 +50,32 @@ function validatePassword() {
         return false;
     } else {
         emptyPswd.innerText = " ";
+        return true;
     }
-    return true;
+};
+
+function validateName() {
+    if (newName.value === "") {
+        newNameMessage.innerText = "Field cannot be empty!";
+        return false;
+    } else {
+        newNameMessage.innerText = " ";
+        return true;
+    }
+};
+
+function validateLogin() {
+    if (newLogin.value === "") {
+        newLoginMessage.innerText = "Field cannot be empty!";
+        return false;
+    } else {
+        newLoginMessage.innerText = " ";
+        return true;
+    }
 };
 
 function changePassword() {
-    if (validatePassword() === true) {
+    if (validatePassword()) {
         var patchData = [{
                 login: localStorage.getItem("login")
             },
@@ -59,134 +84,95 @@ function changePassword() {
             }
         ];
         $.ajax({
-            dataType: "json",
             contentType: "application/json; charset=utf-8",
             type: 'PATCH',
-            url: 'http://localhost:8090/api/auth/users',
+            url: 'http://localhost:8090/api/users',
             data: JSON.stringify(patchData),
-            success: function() {
-                alert('Account has been updated :)');
+            success: function(response) {
+                alert(response);
             },
-            error: function() {
-                alert('error :(');
+            error: function(response) {
+                alert(response);
             }
         });
     }
 };
 
 function changeLogin() {
-    var patchData = [{
-            login: localStorage.getItem("login")
-        },
-        {
-            login: newLogin.value
-        }
-    ];
-    $.ajax({
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        type: 'PATCH',
-        url: 'http://localhost:8090/api/auth/users',
-        data: JSON.stringify(patchData),
-        success: function() {
-            alert('Account has been updated :)');
-        },
-        error: function() {
-            alert('error :(');
-        }
-    });
-};
-
-function validateLogin(one) {
-    if (newLogin.value === "") {
-        newLoginMessage.innerText = "Field cannot be empty!";
-        return false;
-    } else {
-        newLoginMessage.innerText = " ";
+    if (validateLogin()) {
+        var patchData = [{
+                login: localStorage.getItem("login")
+            },
+            {
+                login: newLogin.value
+            }
+        ];
+        $.ajax({
+            contentType: "application/json; charset=utf-8",
+            type: 'PATCH',
+            url: 'http://localhost:8090/api/users',
+            data: JSON.stringify(patchData),
+            success: function(response) {
+                alert(response);
+                localStorage.setItem("login", newLogin.value);
+                localStorage.setItem("name", newName.value);
+                return false;
+            },
+            error: function(response) {
+                alert(response.responseText);
+            }
+        });
     }
-    $.ajax({
-        type: 'GET',
-        url: 'http://localhost:8090/api/auth/user?login=' + newLogin.value,
-        success: function() {
-            newLoginMessage.innerText = "Login is already in use";
-            return false;
-        },
-        error: function() {
-            newLoginMessage.innerText = " ";
-            if (one) changeLogin();
-        }
-    });
-    return true;
 };
 
 function changeName() {
-    var patchData = [{
-            login: localStorage.getItem("login")
-        },
-        {
-            name: newName.value
-        }
-    ];
-    $.ajax({
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        type: 'PATCH',
-        url: 'http://localhost:8090/api/auth/users',
-        data: JSON.stringify(patchData),
-        success: function() {
-            alert('Account has been updated :)');
-        },
-        error: function() {
-            alert('error :(');
-        }
-    });
-};
-
-function validateName(one) {
-    if (newName.value === "") {
-        newNameMessage.innerText = "Field cannot be empty!";
-        return false;
-    } else {
-        newNameMessage.innerText = " ";
+    if (validateName()) {
+        var patchData = [{
+                login: localStorage.getItem("login")
+            },
+            {
+                name: newName.value
+            }
+        ];
+        $.ajax({
+            contentType: "application/json; charset=utf-8",
+            type: 'PATCH',
+            url: 'http://localhost:8090/api/users',
+            data: JSON.stringify(patchData),
+            success: function(response) {
+                alert(response);
+            },
+            error: function(response) {
+                alert(response.responseText);
+            }
+        });
     }
-    $.ajax({
-        type: 'GET',
-        url: 'http://localhost:8090/api/auth/user?name=' + newName.value,
-        success: function() {
-            newNameMessage.innerText = "Name is already in use";
-            return false;
-        },
-        error: function() {
-            newNameMessage.innerText = " ";
-            if (one) changeName();
-        }
-    });
-    return true;
 };
-
-function validateAll() {
-    if ((validateName(false) + validateLogin(false) + validatePassword()) === 3) {
-        changeAll();
-    }
-}
 
 function changeAll() {
-    var patchData = {
-        name: newName,
-        login: newLogin,
-        password: newPassword1
-    };
-    $.ajax({
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        type: 'PATCH',
-        url: 'http://localhost:8090/api/auth/users',
-        data: JSON.stringify(patchData),
-        success: function() {
-            alert('Account has been updated :)');
-        },
-        error: function() {
-            alert('error :(');
-        }
-    });
+    if (validatePassword() && validateName() && validateLogin()) {
+        var patchData = [{
+                login: localStorage.getItem("login")
+            },
+            {
+                name: newName.value,
+                login: newLogin.value,
+                password: newPassword1.value
+            }
+        ];
+        $.ajax({
+            contentType: "application/json; charset=utf-8",
+            type: 'PATCH',
+            url: 'http://localhost:8090/api/users',
+            data: JSON.stringify(patchData),
+            success: function(response) {
+                alert(response);
+                localStorage.setItem("login", newLogin.value);
+                localStorage.setItem("name", newName.value);
+            },
+            error: function(response) {
+                alert(response.responseText);
+            }
+        });
+    }
 };

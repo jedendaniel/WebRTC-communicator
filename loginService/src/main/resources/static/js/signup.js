@@ -1,3 +1,13 @@
+var pasword1;
+var pasword2;
+var notEqualPswd;
+var emptyPswd;
+
+var login;
+var loginMessage;
+var name;
+var nameMessage;
+
 $(function() {
     $(document).ready(function() {
         pasword1 = document.getElementById("password1");
@@ -9,79 +19,48 @@ $(function() {
         loginMessage = document.getElementById("loginMessage");
         name = document.getElementById("name");
         nameMessage = document.getElementById("nameMessage");
+
         $('#createUser').on('click', function() {
-            validateAndChange();
+            if (validatePassword() + validateLogin() + validateName() === 3) {
+                createAccount();
+            }
         });
     });
 });
 
-var pasword1;
-var pasword2;
-var notEqualPswd;
-var emptyPswd;
-
-var login;
-var loginMessage;
-var name;
-var nameMessage;
-
-
-function validateAndChange() {
+function validatePassword() {
     if (password1.value !== password2.value) {
         notEqualPswd.innerText = "Passwords are not the same!";
-        return;
-        //validateLogin(false);
+        return 0;
     } else {
         notEqualPswd.innerText = " ";
     }
     if (password1.value === "" || password2.value === "") {
         emptyPswd.innerText = "Field cannot be empty!";
-        //validateLogin(false);
-        return;
+        return 0;
     } else {
         emptyPswd.innerText = " ";
     }
-    //validateLogin(true);
-    createAccount();
+    return 1;
 };
 
 function validateLogin(prevState) {
     if (login.value === "") {
         loginMessage.innerText = "Field cannot be empty!";
-        validateName(false);
+        return 0;
     } else {
         loginMessage.innerText = " ";
-        // $.ajax({
-        //     type: 'GET',
-        //     url: 'http://localhost:8090/api/auth/user?login=' + login.value,
-        //     success: function() {
-        //         loginMessage.innerText = "Login is already in use";
-        //         validateName(false);
-        //     },
-        //     error: function() {
-        //         loginMessage.innerText = " ";
-        //         validateName(prevState);
-        //     }
-        // });
+        return 1;
     }
 };
 
 function validateName(prevState) {
     if (name.value === "") {
         nameMessage.innerText = "Field cannot be empty!";
+        return 0;
     } else {
         nameMessage.innerText = " ";
-        // $.ajax({
-        //     type: 'GET',
-        //     url: 'http://localhost:8090/api/auth/user?name=' + name.value,
-        //     success: function() {
-        //         nameMessage.innerText = "Name is already in use";
-        //     },
-        //     error: function() {
-        //         nameMessage.innerText = " ";
-        //         createAccount();
-        //     }
-        // });
+        return 1;
     }
 };
 
@@ -90,20 +69,19 @@ function createAccount() {
         name: $('#name').val(),
         login: $('#login').val(),
         password: $('#password1').val(),
-        role: "USER",
+        role: "ROLE_USER",
     };
 
     $.ajax({
-        dataType: "json",
         contentType: "application/json; charset=utf-8",
         type: 'POST',
-        url: 'http://localhost:8090/api/noauth/users',
+        url: 'http://localhost:8090/public/newAccount',
         data: JSON.stringify(user),
-        success: function() {
+        success: function(response) {
             alert('Account has been created :)');
         },
-        error: function() {
-            alert('Error: name bussy, login bussy or something went wrong :(');
+        error: function(response) {
+            document.getElementById("infoFromServer").innerText = response.responseText;
         }
     });
 }

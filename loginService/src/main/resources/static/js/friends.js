@@ -4,7 +4,7 @@ function setupFriendsContent() {
     document.getElementById("invite").addEventListener('click', function() { sendInvitation(); });
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:8090/api/auth/relations?user=' + localStorage.getItem("login"),
+        url: 'http://localhost:8090/api/relations?user=' + localStorage.getItem("login"),
         success: function(response) {
             relations = response;
             loadWaitingTable();
@@ -32,7 +32,7 @@ function sendInvitation() {
     $.ajax({
         contentType: "application/json; charset=utf-8",
         type: 'POST',
-        url: 'http://localhost:8090/api/auth/relations',
+        url: 'http://localhost:8090/api/relations',
         data: JSON.stringify(relation),
         success: function() {
             var table = document.getElementById("sentTable");
@@ -118,7 +118,7 @@ function accept(user, i) {
     $.ajax({
         contentType: "application/json; charset=utf-8",
         type: 'PATCH',
-        url: 'http://localhost:8090/api/auth/relations',
+        url: 'http://localhost:8090/api/relations',
         data: JSON.stringify(relation),
         success: function() {
             document.getElementById("waitingTable").deleteRow(i);
@@ -145,7 +145,7 @@ function reject(user, i) {
     $.ajax({
         contentType: "application/json; charset=utf-8",
         type: 'PATCH',
-        url: 'http://localhost:8090/api/auth/relations',
+        url: 'http://localhost:8090/api/relations',
         data: JSON.stringify(relation),
         success: function() {
             document.getElementById("waitingTable").deleteRow(i);
@@ -185,7 +185,7 @@ function unblock(user, meFirsInRelation, i) {
     $.ajax({
         contentType: "application/json; charset=utf-8",
         type: 'PATCH',
-        url: 'http://localhost:8090/api/auth/relations',
+        url: 'http://localhost:8090/api/relations',
         data: JSON.stringify(relation),
         success: function() {
             alert('accepted');

@@ -39,7 +39,7 @@ function talkFriend(username) {
 function blockFriend(username) {
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:8090/api/auth/relation?user1=' + username + '&user2=' + localStorage.getItem("login"),
+        url: 'http://localhost:8090/api/relation?user1=' + username + '&user2=' + localStorage.getItem("login"),
         success: function(relation) {
             if (relation.usr1Id.name === localStorage.getItem("login")) {
                 relation.status2 = "BLOCKED";
@@ -49,7 +49,7 @@ function blockFriend(username) {
             $.ajax({
                 contentType: "application/json; charset=utf-8",
                 type: 'PATCH',
-                url: 'http://localhost:8090/api/auth/relations',
+                url: 'http://localhost:8090/api/relations',
                 data: JSON.stringify(relation),
                 success: function(response) {
                     refreshFriendsList();
@@ -96,7 +96,7 @@ function deleteFriend(username) {
     $.ajax({
         contentType: "application/json; charset=utf-8",
         type: 'DLETE',
-        url: 'http://localhost:8090/api/auth/relations',
+        url: 'http://localhost:8090/api/relations',
         data: JSON.stringify(relation),
         success: function() {
             var table = document.getElementById("sentTable");
@@ -134,7 +134,7 @@ function fillFriendsTable() {
 function getUserNames() {
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:8090/api/auth/relations?user=' + localStorage.getItem("login"),
+        url: 'http://localhost:8090/api/relations?user=' + localStorage.getItem("login"),
         success: function(response) {
             usersNames = response;
             displayFriendsList();

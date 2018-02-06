@@ -57,7 +57,7 @@ function logout() {
 function checkNotifications() {
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:8090/api/auth/relations?user=' + localStorage.getItem("login"),
+        url: 'http://localhost:8090/api/relations?user=' + localStorage.getItem("login"),
         success: function(response) {
             var i = 0;
             response.forEach(function(element) {

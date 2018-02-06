@@ -30,8 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 //                    .antMatchers("/", "/index.html", "/signup.html", "/js/signup.js", "/api/noauth/**", "/login.html", "/login.js").permitAll() //
 //                    .anyRequest().authenticated()
-                    .antMatchers("/", "/home").permitAll()
-                    .antMatchers("/**", "/api/auth/**").hasAnyRole("ADMIN","USER")
+//                    .antMatchers("/", "/home").permitAll()
+                    .antMatchers("/main.html","/api/**").hasAnyRole("ADMIN","USER")
 //                .and()
 //                    .authorizeRequests()
 //                    .anyRequest().authenticated()

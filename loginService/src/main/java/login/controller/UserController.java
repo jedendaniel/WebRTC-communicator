@@ -17,13 +17,13 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
-    @RequestMapping(value = "auth/users", method = RequestMethod.GET)
+    @RequestMapping(value = "users", method = RequestMethod.GET)
     public ResponseEntity<List<User>> getAllUsers(){
         List<User> list = userService.getAllUsers();
         return new ResponseEntity<List<User>>(list,HttpStatus.OK);
     }
 
-    @RequestMapping(value = "auth/user", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "user", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<User> getUser(@RequestParam(value="name", required = false) String name, @RequestParam(value="login", required = false) String login){
         User user = new User();
         user.setName(name);
@@ -37,7 +37,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "noauth/users", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "users", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity<Void> addUser(@RequestBody User postedUser){
         boolean flag = userService.addUser(postedUser);
         if(flag == false){
@@ -46,16 +46,36 @@ public class UserController {
         return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "auth/users", method = RequestMethod.PATCH, consumes = "application/json")
-    public ResponseEntity<Void> updateUser(@RequestBody User[] user){
-        boolean flag = userService.updateUser(user[0], user[1]);
-        if(flag == false){
-            return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+    @RequestMapping(value = "users", method = RequestMethod.PATCH, consumes = "application/json")
+    public ResponseEntity<String> updateUser(@RequestBody User[] user){
+        StringBuilder message = new StringBuilder();
+//        message.append("{\"msg\"")
+        int i = 0;
+        if(user[1].getName() != null)
+            if(userService.getUser(new User(user[1].getName(),null,null,null)) == null){
+                i++;
+            }
+            else{
+                message.append("Name is already in use.\n");
+            }
+        else i++;
+        if(user[1].getLogin() != null)
+            if(userService.getUser(new User(null, user[1].getLogin(),null,null)) == null){
+                i++;
+            }
+            else{
+                message.append("Login is already in use.\n");
+            }
+        else i++;
+        if(i == 2){
+            message.append("Account has been updated :)\n");
+            userService.updateUser(user[0], user[1]);
+            return new ResponseEntity<String>(message.toString(),HttpStatus.OK);
         }
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<String>(message.toString(),HttpStatus.CONFLICT);
     }
 
-    @RequestMapping(value = "auth/users", method = RequestMethod.DELETE, consumes = "application/json")
+    @RequestMapping(value = "users", method = RequestMethod.DELETE, consumes = "application/json")
     public ResponseEntity<Void> deleteUser(@RequestBody User postedUser){
         boolean flag = userService.deleteUser(postedUser);
         if(flag == false){
