@@ -21,7 +21,7 @@ public class RelationService implements IRelationService {
 
     @Override
     public List<Relation> getAllUserRelations(String login) {
-        return relationDAO.getAllUserRelations(userDao.getUser(new User(null,login,null,null)));
+        return relationDAO.getAllUserRelations(userDao.getUser(new User(null,login,null,null,null)));
     }
 
     @Override

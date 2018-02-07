@@ -27,14 +27,18 @@ public class User {
     @Column(name="role")
     private String role;
 
+    @Column(name="availability")
+    private Boolean availability;
+
     public User() {
     }
 
-    public User(String name, String login, String password, String role) {
+    public User(String name, String login, String password, String role, Boolean availability) {
         this.name = name;
         this.login = login;
         this.password = password;
         this.role = role;
+        this.availability = availability;
     }
 
     public User(User user){
@@ -42,6 +46,7 @@ public class User {
         this.login = user.getLogin();
         this.password = user.getPassword();
         this.role = user.getRole();
+        this.availability = user.getAvailability();
     }
 
     public long getId() {
@@ -80,8 +85,12 @@ public class User {
         this.role = role;
     }
 
-    //
-//    public ArrayList<Relation> getRelations() {
-//        return relations;
-//    }
+    public Boolean getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(Boolean available) {
+        this.availability = available;
+    }
+
 }

@@ -6,9 +6,12 @@ var rowNumber;
 
 getUserNames();
 
-function createFriendButton(list, username) {
+function createFriendButton(list, username, availability) {
     var friendBlock = document.createElement('button');
     friendBlock.classList.add("accordion");
+    if (availability) {
+        friendBlock.style.setProperty("background-color", "#43b72f");
+    }
     friendBlock.innerText = username;
 
     friendBlock.addEventListener("click", function() {
@@ -150,10 +153,10 @@ function displayFriendsList() {
     usersNames.forEach(element => {
         if (element.status1 === "FRIENDS" && element.status2 === "FRIENDS")
             if (element.usr1Id.name === localStorage.getItem("login")) {
-                createFriendButton(friendsList, element.usr2Id.name);
+                createFriendButton(friendsList, element.usr2Id.name, element.usr2Id.availability);
                 createFriendActionPanel(friendsList, element.usr2Id.name);
             } else if (element.usr2Id.name === localStorage.getItem("login")) {
-            createFriendButton(friendsList, element.usr1Id.name);
+            createFriendButton(friendsList, element.usr1Id.name, element.usr1Id.availability);
             createFriendActionPanel(friendsList, element.usr1Id.name);
         }
     });

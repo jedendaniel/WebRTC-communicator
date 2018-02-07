@@ -2,6 +2,10 @@ var stompClient = null;
 
 $(function() {
     $(document).ready(function() {
+        window.onbeforeunload = function() {
+            setAvailability(0);
+        };
+        setAvailability(1);
         loadHomeContent();
         displayFriendsList();
         groupName = null;
@@ -42,17 +46,6 @@ function loadAboutContent() {
     $("#content-div").html("Note about app and me...");
 }
 
-function logout() {
-    //     document.cookie = encodeURIComponent("JSESSIONID") + "=deleted; expires=" + new Date(0).toUTCString();
-    // //    $.cookie('JSESSIONID', null, {path: '/'});
-    // //    localStorage.removeItem("JSESSIONID");
-    // document.cookie = "JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    //    $.ajax({
-    //        type: 'POST',
-    //        url: 'http://localhost:8090/logout'
-    //    });
-    //    window.location.href = "http://localhost:8090/";
-}
 
 function checkNotifications() {
     $.ajax({
@@ -66,11 +59,29 @@ function checkNotifications() {
                 }
             }, this);
             if (i > 0) {
-                alert("Powiadomionka (" + i + ")");
+                alert("Unhandled notifications (" + i + ")");
             }
         },
         error: function() {
-            alert('friend list error :(');
+            alert('notifications error :(');
         }
+    });
+}
+
+function setAvailability(value) {
+    var patchData = [{
+            login: localStorage.getItem("login")
+        },
+        {
+            availability: value
+        }
+    ];
+    $.ajax({
+        contentType: "application/json; charset=utf-8",
+        type: 'PATCH',
+        url: 'http://localhost:8090/api/users',
+        data: JSON.stringify(patchData),
+        success: function(response) {},
+        error: function(response) {}
     });
 }

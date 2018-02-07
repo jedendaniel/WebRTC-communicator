@@ -24,10 +24,10 @@ public class UtilController {
     public ResponseEntity<String> newAccount(@RequestBody User user) {
         StringBuilder message = new StringBuilder();
         int i = 0;
-        if(userDAO.userExists(new User(user.getName(),null,null,null)))
+        if(userDAO.userExists(new User(user.getName(),null,null,null,null)))
             message.append("Name is not available. Try different...\n");
         else i++;
-        if(userDAO.userExists(new User(null,user.getLogin(),null,null)))
+        if(userDAO.userExists(new User(null,user.getLogin(),null,null,null)))
             message.append("Login is not available. Try different...\n");
         else i++;
         if(i == 2) {

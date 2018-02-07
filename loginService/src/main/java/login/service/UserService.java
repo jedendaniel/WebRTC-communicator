@@ -43,6 +43,7 @@ public class UserService implements IUserService {
             if(postedUser.getLogin() != null) user.setLogin(postedUser.getLogin());
             if(postedUser.getName() != null) user.setName(postedUser.getName());
             if(postedUser.getPassword() != null) user.setPassword(crypt(postedUser.getPassword()));
+            if(postedUser.getAvailability() != null) user.setAvailability(postedUser.getAvailability());
             userDAO.updateUser(user);
             return true;
         }

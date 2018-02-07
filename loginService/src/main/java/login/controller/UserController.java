@@ -52,7 +52,7 @@ public class UserController {
 //        message.append("{\"msg\"")
         int i = 0;
         if(user[1].getName() != null)
-            if(userService.getUser(new User(user[1].getName(),null,null,null)) == null){
+            if(userService.getUser(new User(user[1].getName(),null,null,null,null)) == null){
                 i++;
             }
             else{
@@ -60,7 +60,7 @@ public class UserController {
             }
         else i++;
         if(user[1].getLogin() != null)
-            if(userService.getUser(new User(null, user[1].getLogin(),null,null)) == null){
+            if(userService.getUser(new User(null, user[1].getLogin(),null,null,null)) == null){
                 i++;
             }
             else{
