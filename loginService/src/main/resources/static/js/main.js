@@ -4,21 +4,21 @@ $(function() {
     $(document).ready(function() {
         window.onbeforeunload = function() {
             setAvailability(0);
+            groupName = null;
+            for (var key in connectionsGroup) {
+                yourConn = connectionsGroup[key];
+                disconnect();
+            }
+            connectionsGroup = {};
+            videosGroup = {};
+            remoteVideo = null;
+            localVideo = null;
+            singleMode = null;
+            init = null;
         };
         setAvailability(1);
         loadHomeContent();
         displayFriendsList();
-        groupName = null;
-        for (var key in connectionsGroup) {
-            yourConn = connectionsGroup[key];
-            disconnect();
-        }
-        connectionsGroup = {};
-        videosGroup = {};
-        remoteVideo = null;
-        localVideo = null;
-        singleMode = null;
-        init = null;
     });
 });
 
