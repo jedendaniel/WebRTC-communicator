@@ -29,6 +29,7 @@ function onMessage(message) {
             sendOffer();
             break;
         case "invitationRejected":
+            alert("User does not want to talk :(");
             disconnect();
             break;
         case "offer":

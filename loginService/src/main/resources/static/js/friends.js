@@ -1,7 +1,7 @@
 var relations;
 
 function setupFriendsContent() {
-    document.getElementById("invite").addEventListener('click', function() { sendInvitation(); });
+    document.getElementById("invite").addEventListener('click', function() { sendRelationInvitation(); });
     $.ajax({
         type: 'GET',
         url: 'http://localhost:8090/api/relations?user=' + localStorage.getItem("login"),
@@ -17,7 +17,7 @@ function setupFriendsContent() {
     });
 }
 
-function sendInvitation() {
+function sendRelationInvitation() {
     var relation = {
         usr1Id: {
             login: localStorage.getItem("login")
@@ -195,8 +195,4 @@ function unblock(user, meFirsInRelation, i) {
             alert('error while unblocking');
         }
     });
-}
-
-function sentInvitation() {
-
 }

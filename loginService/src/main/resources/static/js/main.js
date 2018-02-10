@@ -9,13 +9,13 @@ $(function() {
                 yourConn = connectionsGroup[key];
                 disconnect();
             }
-            connectionsGroup = {};
-            videosGroup = {};
-            remoteVideo = null;
-            localVideo = null;
-            singleMode = null;
-            init = null;
         };
+        connectionsGroup = {};
+        videosGroup = {};
+        remoteVideo = null;
+        localVideo = null;
+        singleMode = null;
+        init = null;
         setAvailability(1);
         loadHomeContent();
         displayFriendsList();
