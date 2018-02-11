@@ -24,8 +24,8 @@ public class MyAppUserDetailsService implements UserDetailsService {
         user.setLogin(s);
         user = userDAO.getUser(user);
         GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole());
-        UserDetails userDetails = (UserDetails)new org.springframework.security.core.userdetails.User(
-                user.getLogin(),user.getPassword(), Arrays.asList(authority));
+        UserDetails userDetails = (UserDetails) new org.springframework.security.core.userdetails.User(
+                user.getLogin(), user.getPassword(), Arrays.asList(authority));
         return userDetails;
     }
 }

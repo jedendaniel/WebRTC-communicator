@@ -62,7 +62,7 @@ public class UserControllerTest {
     private User user;
 
     @Before
-    public void setupTests(){
+    public void setupTests() {
         user = new User("testUserName",
                 "testUserLogin",
                 "testUserPassword",
@@ -77,7 +77,7 @@ public class UserControllerTest {
         this.mockMvc.perform(get("/api/User?login=asd")
 //                    .contentType(contentType)
 //                    .content(userJson)
-                ).andExpect(status().isFound());
+        ).andExpect(status().isFound());
     }
 
     protected String json(Object o) throws IOException {

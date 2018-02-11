@@ -34,14 +34,11 @@ public class MessageController {
     }
 
     @MessageMapping("/chat")
-//    @SendTo("/topic/response")
-    public void onMessage(Message<Object> message, @Payload ClientMessage chatMessage) throws Exception {
-
+    public void redirectMessage(Message<Object> message, @Payload ClientMessage clientMessage)
+            throws Exception {
         Thread.sleep(100); // simulated delay
-        Principal principal = message.getHeaders().get(SimpMessageHeaderAccessor.USER_HEADER, Principal.class);
-        String authedSender = principal.getName();
-        String recipient = chatMessage.getRecipient();
-        template.convertAndSendToUser(recipient, "/queue/messages", chatMessage);
+        String recipient = clientMessage.getRecipient();
+        template.convertAndSendToUser(recipient, "/queue/messages", clientMessage);
     }
 
     @MessageMapping("/group/{groupName}")

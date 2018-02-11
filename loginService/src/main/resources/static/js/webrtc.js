@@ -9,15 +9,8 @@ var blob;
 var recipient;
 var sender = localStorage.getItem("login");
 
-var yourConn;
-var dataChannel;
-
 var init;
 var singleMode;
-
-function setRecipient(name) {
-    recipient = name;
-}
 
 function setupConnection() {
     localVideo = document.getElementById('localVideo');
@@ -34,7 +27,6 @@ function setupConnection() {
             console.log(error);
         });
     } else if (navigator.userAgent.indexOf("Firefox") != -1) {
-        sender = "qwe";
         navigator.mediaDevices.getUserMedia({ video: true, audio: true }, function(myStream) {
             initConnection(myStream)
         }, function(error) {
@@ -73,7 +65,7 @@ function initConnection(myStream) {
     if (init) {
         dataChannelsGroup[recipient] = connectionsGroup[recipient].createDataChannel("myDataChannel", { reliable: true });
         dataChannelsGroup[recipient].onmessage = handleChatMessage;
-        yourConn = connectionsGroup[recipient];
+        connectionsGroup[recipient] = connectionsGroup[recipient];
         if (singleMode) { sendInvitation(); } else {
 
         }
@@ -100,22 +92,22 @@ function onInitError(error) {
 }
 
 function sendOffer() {
-    yourConn.createOffer(function(offer) {
+    connectionsGroup[recipient].createOffer(function(offer) {
         sendWebSocketMessage({
             type: "offer",
             recipient: recipient,
             sender: sender,
             data: JSON.stringify(offer)
         });
-        yourConn.setLocalDescription(offer);
+        connectionsGroup[recipient].setLocalDescription(offer);
     }, function(error) {
         alert("Error when creating an offer");
     });
 };
 
 function disconnect() {
-    yourConn.close();
-    yourConn.onicecandidate = null;
+    connectionsGroup[recipient].close();
+    connectionsGroup[recipient].onicecandidate = null;
     console.log("Disconnected");
     if (stompClient !== null) {
         stompClient.disconnect();
@@ -123,11 +115,11 @@ function disconnect() {
 }
 
 function handleOffer(offer) {
-    yourConn.setRemoteDescription(new RTCSessionDescription(offer));
+    connectionsGroup[recipient].setRemoteDescription(new RTCSessionDescription(offer));
 
     //create an answer to an offer 
-    yourConn.createAnswer(function(answer) {
-        yourConn.setLocalDescription(answer);
+    connectionsGroup[recipient].createAnswer(function(answer) {
+        connectionsGroup[recipient].setLocalDescription(answer);
         sendWebSocketMessage({
             type: "answer",
             recipient: recipient,
@@ -142,12 +134,12 @@ function handleOffer(offer) {
 
 //when we got an answer from a remote user 
 function handleAnswer(answer) {
-    yourConn.setRemoteDescription(new RTCSessionDescription(answer));
+    connectionsGroup[recipient].setRemoteDescription(new RTCSessionDescription(answer));
 };
 
 //when we got an ice candidate from a remote user 
 function handleCandidate(candidate) {
-    yourConn.addIceCandidate(new RTCIceCandidate(candidate));
+    connectionsGroup[recipient].addIceCandidate(new RTCIceCandidate(candidate));
     console.log("candidate added");
 };
 

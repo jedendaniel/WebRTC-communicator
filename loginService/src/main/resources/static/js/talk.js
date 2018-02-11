@@ -21,7 +21,7 @@ function setupTalkContent() {
 }
 
 function startVideoTalk() {
-    setRecipient(document.getElementById("talkFriend").value);
+    recipient = document.getElementById("talkFriend").value;
     $("#content-div").html("");
     $("#content-div").load("videoTalk.html", function() {
         singleMode = true;

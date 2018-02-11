@@ -1,11 +1,7 @@
 var stompClient = null;
-var socket = new SockJS('/gs-guide-websocket');
-
+var socket = new SockJS('/webrtcapi-websocket');
 stompClient = Stomp.over(socket);
 stompClient.connect({}, function(frame) {
-    // stompClient.subscribe('/topic/response', function(response) {
-    //     alert(JSON.parse(response.body).content);
-    // });
     stompClient.subscribe('/user/queue/messages', function(message) {
         onMessage(message);
     });
@@ -25,23 +21,18 @@ function onMessage(message) {
             confirmBox(msg.sender);
             break;
         case "invitationAccepted":
-            yourConn = connectionsGroup[recipient];
             sendOffer();
             break;
         case "invitationRejected":
-            alert("User does not want to talk :(");
             disconnect();
             break;
         case "offer":
-            yourConn = connectionsGroup[recipient];
             handleOffer(JSON.parse(msg.data));
             break;
         case "answer":
-            yourConn = connectionsGroup[recipient];
             handleAnswer(JSON.parse(msg.data));
             break;
         case "candidate":
-            yourConn = connectionsGroup[recipient];
             handleCandidate(JSON.parse(msg.data));
             break;
         case "leave":
@@ -51,8 +42,6 @@ function onMessage(message) {
             groupConfirmBox(msg);
             break;
         case "initializeRequest":
-            initGroupConnection
-            console.log("initializeRequest message handling")
             init = true;
             singleMode = false;
             setupGroupConnection();
@@ -107,7 +96,6 @@ function groupConfirmBox(msg) {
 }
 
 function clearTalk() {
-    yourConn = connectionsGroup[recipient];
     disconnect();
     stream.getTracks().forEach(element => {
         element.stop();

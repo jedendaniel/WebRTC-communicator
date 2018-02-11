@@ -18,67 +18,65 @@ public class UserController {
     private IUserService userService;
 
     @RequestMapping(value = "users", method = RequestMethod.GET)
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<User>> getAllUsers() {
         List<User> list = userService.getAllUsers();
-        return new ResponseEntity<List<User>>(list,HttpStatus.OK);
+        return new ResponseEntity<List<User>>(list, HttpStatus.OK);
     }
 
     @RequestMapping(value = "user", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<User> getUser(@RequestParam(value="name", required = false) String name, @RequestParam(value="login", required = false) String login){
+    public ResponseEntity<User> getUser(@RequestParam(value = "name", required = false) String name,
+                                        @RequestParam(value = "login", required = false) String login) {
         User user = new User();
         user.setName(name);
         user.setLogin(login);
         user = userService.getUser(user);
-        if(user != null){
-            return new ResponseEntity<User>(user,HttpStatus.OK);
-        }
-        else{
-            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+        if (user != null) {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @RequestMapping(value = "users", method = RequestMethod.POST, consumes = "application/json")
-    public ResponseEntity<Void> addUser(@RequestBody User postedUser){
+    public ResponseEntity<Void> addUser(@RequestBody User postedUser) {
         boolean flag = userService.addUser(postedUser);
-        if(flag == false){
+        if (flag == false) {
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         }
         return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "users", method = RequestMethod.PATCH, consumes = "application/json")
-    public ResponseEntity<String> updateUser(@RequestBody User[] user){
+    public ResponseEntity<String> updateUser(@RequestBody User[] user) {
         StringBuilder message = new StringBuilder();
 //        message.append("{\"msg\"")
         int i = 0;
-        if(user[1].getName() != null)
-            if(userService.getUser(new User(user[1].getName(),null,null,null,null)) == null){
+        if (user[1].getName() != null)
+            if (userService.getUser(new User(user[1].getName(), null, null, null, null)) == null) {
                 i++;
-            }
-            else{
+            } else {
                 message.append("Name is already in use.\n");
             }
         else i++;
-        if(user[1].getLogin() != null)
-            if(userService.getUser(new User(null, user[1].getLogin(),null,null,null)) == null){
+        if (user[1].getLogin() != null)
+            if (userService.getUser(new User(null, user[1].getLogin(), null, null, null)) == null) {
                 i++;
-            }
-            else{
+            } else {
                 message.append("Login is already in use.\n");
             }
         else i++;
-        if(i == 2){
+        if (i == 2) {
             message.append("Account has been updated :)\n");
             userService.updateUser(user[0], user[1]);
-            return new ResponseEntity<String>(message.toString(),HttpStatus.OK);
+            return new ResponseEntity<String>(message.toString(), HttpStatus.OK);
         }
-        return new ResponseEntity<String>(message.toString(),HttpStatus.CONFLICT);
+        return new ResponseEntity<String>(message.toString(), HttpStatus.CONFLICT);
     }
 
     @RequestMapping(value = "users", method = RequestMethod.DELETE, consumes = "application/json")
-    public ResponseEntity<Void> deleteUser(@RequestBody User postedUser){
+    public ResponseEntity<Void> deleteUser(@RequestBody User postedUser) {
         boolean flag = userService.deleteUser(postedUser);
-        if(flag == false){
+        if (flag == false) {
             return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<Void>(HttpStatus.OK);

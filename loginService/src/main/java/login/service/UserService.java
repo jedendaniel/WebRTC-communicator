@@ -26,11 +26,10 @@ public class UserService implements IUserService {
 
     @Override
     public synchronized boolean addUser(User user) {
-        user.setPassword(crypt(user.getPassword()));
-        if(userDAO.userExists(user)){
+        if (userDAO.userExists(user)) {
             return false;
-        }
-        else{
+        } else {
+            user.setPassword(crypt(user.getPassword()));
             userDAO.addUser(user);
             return true;
         }
@@ -39,15 +38,14 @@ public class UserService implements IUserService {
     @Override
     public boolean updateUser(User user, User postedUser) {
         user = userDAO.getUser(user);
-        if(user != null){
-            if(postedUser.getLogin() != null) user.setLogin(postedUser.getLogin());
-            if(postedUser.getName() != null) user.setName(postedUser.getName());
-            if(postedUser.getPassword() != null) user.setPassword(crypt(postedUser.getPassword()));
-            if(postedUser.getAvailability() != null) user.setAvailability(postedUser.getAvailability());
+        if (user != null) {
+            if (postedUser.getLogin() != null) user.setLogin(postedUser.getLogin());
+            if (postedUser.getName() != null) user.setName(postedUser.getName());
+            if (postedUser.getPassword() != null) user.setPassword(crypt(postedUser.getPassword()));
+            if (postedUser.getAvailability() != null) user.setAvailability(postedUser.getAvailability());
             userDAO.updateUser(user);
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
@@ -55,16 +53,15 @@ public class UserService implements IUserService {
     @Override
     public boolean deleteUser(User user) {
         user = userDAO.getUser(user);
-        if(user != null){
+        if (user != null) {
             userDAO.deleteUser(user);
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
 
-    private String crypt(String password){
+    private String crypt(String password) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.encode(password);
     }

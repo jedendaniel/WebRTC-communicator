@@ -21,7 +21,7 @@ public class RelationService implements IRelationService {
 
     @Override
     public List<Relation> getAllUserRelations(String login) {
-        return relationDAO.getAllUserRelations(userDao.getUser(new User(null,login,null,null,null)));
+        return relationDAO.getAllUserRelations(userDao.getUser(new User(null, login, null, null, null)));
     }
 
     @Override
@@ -43,13 +43,12 @@ public class RelationService implements IRelationService {
         User user2 = new User();
         user2.setName(name2);
         user2 = userDao.getUser(user2);
-        if(user1 != null && user2 != null){
+        if (user1 != null && user2 != null) {
             Relation relation1 = new Relation();
             relation.setUsr1Id(user1);
             relation.setUsr2Id(user2);
             return relationDAO.getRelation(relation);
-        }
-        else{
+        } else {
             return null;
         }
     }
@@ -59,8 +58,8 @@ public class RelationService implements IRelationService {
         User user1 = userDao.getUser(relation.getUsr1Id());
         relation.setUsr1Id(user1);
         relation.setUsr2Id(userDao.getUser(relation.getUsr2Id()));
-        if(relation.getUsr1Id() != null && relation.getUsr2Id() != null){
-            if(relationDAO.getRelation(relation) == null){
+        if (relation.getUsr1Id() != null && relation.getUsr2Id() != null) {
+            if (relationDAO.getRelation(relation) == null) {
                 relationDAO.addRelation(relation);
                 return true;
             }
@@ -72,9 +71,9 @@ public class RelationService implements IRelationService {
     public boolean updateRelation(Relation relation) {
         relation.setUsr1Id(userDao.getUser(relation.getUsr1Id()));
         relation.setUsr2Id(userDao.getUser(relation.getUsr2Id()));
-        if(relation.getUsr1Id() != null && relation.getUsr2Id() != null){
+        if (relation.getUsr1Id() != null && relation.getUsr2Id() != null) {
             relation.setId(relationDAO.getRelation(relation).getId());
-            if(relation != null){
+            if (relation != null) {
                 relationDAO.updateRelation(relation);
                 return true;
             }
@@ -86,9 +85,9 @@ public class RelationService implements IRelationService {
     public boolean deleteRelation(Relation relation) {
         relation.setUsr1Id(userDao.getUser(relation.getUsr1Id()));
         relation.setUsr2Id(userDao.getUser(relation.getUsr2Id()));
-        if(relation.getUsr1Id() != null && relation.getUsr2Id() != null){
+        if (relation.getUsr1Id() != null && relation.getUsr2Id() != null) {
             relation = relationDAO.getRelation(relation);
-            if(relation != null){
+            if (relation != null) {
                 relationDAO.deleteRelation(relation);
                 return true;
             }

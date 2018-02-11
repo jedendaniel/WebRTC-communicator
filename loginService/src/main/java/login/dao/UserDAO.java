@@ -16,6 +16,7 @@ public class UserDAO implements IUserDAO {
     private EntityManager entityManager;
 
     @SuppressWarnings("unchecked")
+
     @Override
     public List<User> getAllUsers() {
         String hql = "FROM User as usr ORDER BY usr.id";
@@ -26,8 +27,8 @@ public class UserDAO implements IUserDAO {
     public boolean userExists(User user) {
         String hql = "FROM User as usr WHERE (usr.login = ? or usr.name = ?)";
         int count = entityManager.createQuery(hql)
-                .setParameter(1,user.getLogin())
-                .setParameter(2,user.getName()).getResultList().size();
+                .setParameter(1, user.getLogin())
+                .setParameter(2, user.getName()).getResultList().size();
         return count > 0 ? true : false;
     }
 
@@ -35,10 +36,10 @@ public class UserDAO implements IUserDAO {
     public User getUser(User user) {
         String hql = "SELECT usr FROM User usr WHERE (login = ? or name = ?)";
         List<?> list = entityManager.createQuery(hql)
-                .setParameter(1,user.getLogin())
-                .setParameter(2,user.getName()).getResultList();
-        if(!list.isEmpty()){
-            user = (User)list.get(0);
+                .setParameter(1, user.getLogin())
+                .setParameter(2, user.getName()).getResultList();
+        if (!list.isEmpty()) {
+            user = (User) list.get(0);
             return user;
         }
         return null;

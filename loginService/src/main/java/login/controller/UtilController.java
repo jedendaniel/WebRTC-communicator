@@ -19,18 +19,19 @@ import java.util.List;
 public class UtilController {
     @Autowired
     private IUserDAO userDAO;
+
     @RequestMapping(value = "newAccount", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public ResponseEntity<String> newAccount(@RequestBody User user) {
         StringBuilder message = new StringBuilder();
         int i = 0;
-        if(userDAO.userExists(new User(user.getName(),null,null,null,null)))
+        if (userDAO.userExists(new User(user.getName(), null, null, null, null)))
             message.append("Name is not available. Try different...\n");
         else i++;
-        if(userDAO.userExists(new User(null,user.getLogin(),null,null,null)))
+        if (userDAO.userExists(new User(null, user.getLogin(), null, null, null)))
             message.append("Login is not available. Try different...\n");
         else i++;
-        if(i == 2) {
+        if (i == 2) {
             try {
                 user.setPassword(crypt(user.getPassword()));
                 userDAO.addUser(user);
@@ -39,13 +40,12 @@ public class UtilController {
                 return new ResponseEntity<String>(message.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
             return new ResponseEntity<String>(message.toString(), HttpStatus.OK);
-        }
-        else{
+        } else {
             return new ResponseEntity<String>(message.toString(), HttpStatus.CONFLICT);
         }
     }
 
-    private String crypt(String password){
+    private String crypt(String password) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.encode(password);
     }

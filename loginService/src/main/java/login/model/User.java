@@ -15,19 +15,19 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
-    @Column(name="login")
+    @Column(name = "login")
     private String login;
 
-    @Column(name="password")
+    @Column(name = "password")
     private String password;
 
-    @Column(name="role")
+    @Column(name = "role")
     private String role;
 
-    @Column(name="availability")
+    @Column(name = "availability")
     private Boolean availability;
 
     public User() {
@@ -41,7 +41,7 @@ public class User {
         this.availability = availability;
     }
 
-    public User(User user){
+    public User(User user) {
         this.name = user.getName();
         this.login = user.getLogin();
         this.password = user.getPassword();

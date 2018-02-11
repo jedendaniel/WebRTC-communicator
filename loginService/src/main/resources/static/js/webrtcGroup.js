@@ -12,10 +12,6 @@ var sender = localStorage.getItem("login");
 var connectionsGroup = {};
 var dataChannelsGroup = {};
 
-function setRecipient(name) {
-    recipient = name;
-}
-
 function setupGroupConnection() {
     localVideo = document.getElementById('localVideo');
     var newVideo = document.createElement('video');
@@ -33,7 +29,6 @@ function setupGroupConnection() {
             console.log(error);
         });
     } else if (navigator.userAgent.indexOf("Firefox") != -1) {
-        sender = localStorage.getItem("login");
         navigator.mediaDevices.getUserMedia({ video: true, audio: true }, function(myStream) {
             initGroupConnection(myStream)
         }, function(error) {
@@ -73,7 +68,6 @@ function initGroupConnection(myStream) {
     if (init) {
         dataChannelsGroup[recipient] = connectionsGroup[recipient].createDataChannel("myDataChannel", { reliable: true });
         dataChannelsGroup[recipient].onmessage = handleGroupMessage;
-        yourConn = connectionsGroup[recipient];
         sendOffer();
     } else {
         connectionsGroup[recipient].ondatachannel = function(event) {

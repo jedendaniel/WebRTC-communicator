@@ -18,12 +18,13 @@ import javax.sql.DataSource;
 //@PropertySource(value = { "login.auth" })
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled=true)
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private MyAppUserDetailsService myAppUserDetailsService;
     @Autowired
     private AppAuthenticationEntryPoint appAuthenticationEntryPoint;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -31,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                    .antMatchers("/", "/index.html", "/signup.html", "/js/signup.js", "/api/noauth/**", "/login.html", "/login.js").permitAll() //
 //                    .anyRequest().authenticated()
 //                    .antMatchers("/", "/home").permitAll()
-                    .antMatchers("/main.html","/api/**").hasAnyRole("ADMIN","USER")
+                .antMatchers("/main.html", "/api/**").hasAnyRole("ADMIN", "USER")
 //                .and()
 //                    .authorizeRequests()
 //                    .anyRequest().authenticated()
@@ -41,10 +42,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .httpBasic().realmName("webrtcapi")
-                    .authenticationEntryPoint(appAuthenticationEntryPoint)
+                .authenticationEntryPoint(appAuthenticationEntryPoint)
                 .and()
                 .logout()
-                    .permitAll();
+                .permitAll();
     }
 
     @Autowired

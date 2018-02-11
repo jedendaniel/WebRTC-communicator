@@ -18,9 +18,9 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/group", "/gs-guide-websocket");
-        registry.addEndpoint("/group", "/gs-guide-websocket").withSockJS();
-        registry.addEndpoint("/chat", "/gs-guide-websocket");
-        registry.addEndpoint("/chat", "/gs-guide-websocket").withSockJS();
+        registry.addEndpoint("/group", "/webrtcapi-websocket");
+        registry.addEndpoint("/group", "/webrtcapi-websocket").withSockJS();
+        registry.addEndpoint("/chat", "/webrtcapi-websocket");
+        registry.addEndpoint("/chat", "/webrtcapi-websocket").withSockJS();
     }
 }
