@@ -50,11 +50,11 @@ function loadAboutContent() {
 function checkNotifications() {
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:8090/api/relations?user=' + localStorage.getItem("login"),
+        url: 'https://192.168.0.110:8090/api/relations?user=' + localStorage.getItem("login"),
         success: function(response) {
             var i = 0;
             response.forEach(function(element) {
-                if (element.status2 === "PENDING" && element.usr2Id.name === localStorage.getItem("login")) {
+                if (element.status2 === "PENDING" && element.usr2Id.login === localStorage.getItem("login")) {
                     i++;
                 }
             }, this);
@@ -79,7 +79,7 @@ function setAvailability(value) {
     $.ajax({
         contentType: "application/json; charset=utf-8",
         type: 'PATCH',
-        url: 'http://localhost:8090/api/users',
+        url: 'https://192.168.0.110:8090/api/users',
         data: JSON.stringify(patchData),
         success: function(response) {},
         error: function(response) {}

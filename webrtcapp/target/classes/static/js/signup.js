@@ -75,7 +75,7 @@ function createAccount() {
     $.ajax({
         contentType: "application/json; charset=utf-8",
         type: 'POST',
-        url: 'http://localhost:8090/public/newAccount',
+        url: 'https://192.168.0.110:8090/public/newAccount',
         data: JSON.stringify(user),
         success: function(response) {
             alert('Account has been created :)');

@@ -1,0 +1,25 @@
+<div>
+    <p>Friend name: <input type="text" id="groupFriend"></p>
+    <button id="inviteToGroup" onclick="inviteToGroup()">Invite</button>
+</div>
+
+<div id="videoDiv" style="float:left;width:420px;padding-top:50px">
+    <video id="localVideo" autoplay></video>
+</div>
+
+<div style="float:left;padding-left:50px;padding-top:50px">
+    <textarea readonly id="chatArea" style="width:180px;height: 100px;resize: none;"></textarea>
+    <br>
+    <textarea id="newChatMessage" style="width:180px;height: 40px;resize: none;"></textarea>
+    <br>
+    <button id="sendChatMessageBtn" onclick="sendGroupMessage()">send</button>
+    <br>
+    <br>
+    <input type="file" id="files" name="files[]" multiple/>
+    <output id="list"></output>
+    <br>
+    <button id="sendFilesBtn" onclick="sendFiles()">send file</button>
+    <br>
+    <br>
+    <button id="disconnectFromGroup" onclick="disconnectFromGroup()">leave</button>
+</div>

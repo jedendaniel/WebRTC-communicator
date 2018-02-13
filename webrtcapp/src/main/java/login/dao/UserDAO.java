@@ -45,16 +45,19 @@ public class UserDAO implements IUserDAO {
         return null;
     }
 
+    @Transactional
     @Override
     public void addUser(User user) {
         entityManager.persist(user);
     }
 
+    @Transactional
     @Override
     public void updateUser(User user) {
         entityManager.merge(user);
     }
 
+    @Transactional
     @Override
     public void deleteUser(User user) {
         entityManager.remove(user);

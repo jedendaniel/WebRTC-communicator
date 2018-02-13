@@ -18,18 +18,21 @@ public class RelationController {
     @Autowired
     private IRelationService relationService;
 
+    @CrossOrigin
     @RequestMapping(value = "/relations", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public ResponseEntity<List<Relation>> getAllUserRelations(@RequestParam(value = "user") String user) {
         return new ResponseEntity<List<Relation>>(relationService.getAllUserRelations(user), HttpStatus.OK);
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/relation", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public ResponseEntity<Relation> getRelation(@RequestParam(value = "user1") String user1, @RequestParam(value = "user2") String user2) {
         return new ResponseEntity<Relation>(relationService.getRelation(user1, user2), HttpStatus.OK);
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/relations", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public ResponseEntity<Void> addRelation(@RequestBody Relation relation) {
@@ -40,6 +43,7 @@ public class RelationController {
         }
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/relations", method = RequestMethod.PATCH, consumes = "application/json")
     @ResponseBody
     public ResponseEntity<Void> updateRelation(@RequestBody Relation relation) {
@@ -50,6 +54,7 @@ public class RelationController {
         }
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/relations", method = RequestMethod.DELETE, consumes = "application/json")
     @ResponseBody
     public ResponseEntity<Void> removeRelation(@RequestBody Relation relation) {

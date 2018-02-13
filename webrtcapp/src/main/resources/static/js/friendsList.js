@@ -42,9 +42,9 @@ function talkFriend(username) {
 function blockFriend(username) {
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:8090/api/relation?user1=' + username + '&user2=' + localStorage.getItem("login"),
+        url: 'https://192.168.0.110:8090/api/relation?user1=' + username + '&user2=' + localStorage.getItem("login"),
         success: function(relation) {
-            if (relation.usr1Id.name === localStorage.getItem("login")) {
+            if (relation.usr1Id.login === localStorage.getItem("login")) {
                 relation.status2 = "BLOCKED";
             } else {
                 relation.status1 = "BLOCKED";
@@ -52,20 +52,20 @@ function blockFriend(username) {
             $.ajax({
                 contentType: "application/json; charset=utf-8",
                 type: 'PATCH',
-                url: 'http://localhost:8090/api/relations',
+                url: 'https://192.168.0.110:8090/api/relations',
                 data: JSON.stringify(relation),
                 success: function(response) {
                     refreshFriendsList();
                     var table = document.getElementById("blockedTable");
                     if (table !== null) {
-                        if (response.status2 === "BLOCKED" && response.usr1Id.name === localStorage.getItem("login")) {
+                        if (response.status2 === "BLOCKED" && response.usr1Id.login === localStorage.getItem("login")) {
                             var row = table.insertRow(1);
                             var cell1 = row.insertCell(0);
                             var cell2 = row.insertCell(1);
                             cell1.innerHTML = response.usr2Id.name;
                             cell2.innerHTML = "<label style='color:blue;pading-left:2px;cursor:pointer;' onclick=unblock('" + response.usr1Id.name + "'," + true + "," + 1 + ")><u>unblock</u></label>";
                             i++;
-                        } else if (response.status1 === "BLOCKED" && response.usr2Id.name === localStorage.getItem("login")) {
+                        } else if (response.status1 === "BLOCKED" && response.usr2Id.login === localStorage.getItem("login")) {
                             var row = table.insertRow(1);
                             var cell1 = row.insertCell(0);
                             var cell2 = row.insertCell(1);
@@ -99,7 +99,7 @@ function deleteFriend(username) {
     $.ajax({
         contentType: "application/json; charset=utf-8",
         type: 'DLETE',
-        url: 'http://localhost:8090/api/relations',
+        url: 'https://192.168.0.110:8090/api/relations',
         data: JSON.stringify(relation),
         success: function() {
             var table = document.getElementById("sentTable");
@@ -137,7 +137,7 @@ function fillFriendsTable() {
 function getUserNames() {
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:8090/api/relations?user=' + localStorage.getItem("login"),
+        url: 'https://192.168.0.110:8090/api/relations?user=' + localStorage.getItem("login"),
         success: function(response) {
             usersNames = response;
             displayFriendsList();
@@ -152,10 +152,10 @@ function displayFriendsList() {
     var friendsList = document.getElementById("friendsList");
     usersNames.forEach(element => {
         if (element.status1 === "FRIENDS" && element.status2 === "FRIENDS")
-            if (element.usr1Id.name === localStorage.getItem("login")) {
+            if (element.usr1Id.login === localStorage.getItem("login")) {
                 createFriendButton(friendsList, element.usr2Id.name, element.usr2Id.availability);
                 createFriendActionPanel(friendsList, element.usr2Id.name);
-            } else if (element.usr2Id.name === localStorage.getItem("login")) {
+            } else if (element.usr2Id.login === localStorage.getItem("login")) {
             createFriendButton(friendsList, element.usr1Id.name, element.usr1Id.availability);
             createFriendActionPanel(friendsList, element.usr1Id.name);
         }

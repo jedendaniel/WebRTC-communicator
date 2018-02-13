@@ -20,6 +20,7 @@ public class UtilController {
     @Autowired
     private IUserDAO userDAO;
 
+    @CrossOrigin
     @RequestMapping(value = "newAccount", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
     public ResponseEntity<String> newAccount(@RequestBody User user) {

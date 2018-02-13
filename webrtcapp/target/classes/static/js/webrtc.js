@@ -27,11 +27,16 @@ function setupConnection() {
             console.log(error);
         });
     } else if (navigator.userAgent.indexOf("Firefox") != -1) {
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true }, function(myStream) {
-            initConnection(myStream)
-        }, function(error) {
-            console.log(error);
-        });
+        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+            .then(function(mediaStream) {
+                initConnection(mediaStream);
+            })
+            .catch(function(err) { console.log(err.name + ": " + err.message); });
+        // navigator.mediaDevices.getUserMedia({ video: true, audio: true }, function(myStream) {
+        //     initConnection(myStream)
+        // }, function(error) {
+        //     console.log(error);
+        // });
     }
 }
 
@@ -42,7 +47,7 @@ function initConnection(myStream) {
     var configuration = {
         "iceServers": [{ "url": "stun:stun2.1.google.com:19302" }]
     };
-    connectionsGroup[recipient] = new webkitRTCPeerConnection(configuration, { optional: [{ RtcDataChannels: true }] });
+    connectionsGroup[recipient] = new RTCPeerConnection(configuration, { optional: [{ RtcDataChannels: true }] });
     console.log("RTCPeerConnection object was created");
     connectionsGroup[recipient].addStream(stream);
 

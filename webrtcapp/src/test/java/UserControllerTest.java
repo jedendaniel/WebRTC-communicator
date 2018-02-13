@@ -16,8 +16,10 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //import org.springframework.boot.context.embedded.LocalServerPort;
@@ -69,16 +71,38 @@ public class UserControllerTest {
                 "ROLE_USER", false);
     }
 
-    @Test
-    public void addUser() throws Exception {
+    // @Test
+    // public void foundUserByLogin() throws Exception {
+    //     this.mockMvc.perform(get("/api/User?login=ddaniel")
+    //     ).andExpect(status().isFound())
+    //     .andExpect(jsonPath("$.id", is("37")))
+    //     .andExpect(jsonPath("$.name", is("Daniel")))
+    //     .andExpect(jsonPath("$.login", is("ddaniel")))
+    //     .andExpect(jsonPath("$.role", is("ROLE_USER")));
+    // }
 
-        String userJson = json(user);
+    // @Test
+    // public void notFoundUserByLogin() throws Exception {
+    //     this.mockMvc.perform(get("/api/User?login=not-ddaniel")
+    //     ).andExpect(status().isNotFound());
+    // }
 
-        this.mockMvc.perform(get("/api/User?login=asd")
-//                    .contentType(contentType)
-//                    .content(userJson)
-        ).andExpect(status().isFound());
-    }
+    // @Test
+    // public void badRequestUserByLogin() throws Exception {
+    //     this.mockMvc.perform(get("/api/Userrrrr?login??")
+    //     ).andExpect(status().isNotFound());
+    // }
+
+//    @Test
+//    public void foundUserByLogin() throws Exception {
+//
+//        String userJson = json(user);
+//
+//        this.mockMvc.perform(get("/api/User?login=ddaniel")
+////                    .contentType(contentType)
+////                    .content(userJson)
+//        ).andExpect(status().isFound());
+//    }
 
     protected String json(Object o) throws IOException {
         MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();

@@ -1,0 +1,92 @@
+body {
+    background-color: rgb(175, 175, 175);
+}
+
+h1 {
+    color: rgb(64, 64, 122);
+}
+
+p {
+    color: rgb(43, 31, 31);
+}
+
+#p01 {
+    color: rgb(33, 114, 24);
+}
+
+#p-error {
+    color: rgb(255, 0, 0);
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #555;
+}
+
+li {
+    float: left;
+    border-right: 1px solid #bbb;
+}
+
+li:last-child {
+    border-right: none;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 30px;
+    text-decoration: none;
+    width: 100px
+}
+
+#logout {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 30px;
+    text-decoration: none;
+    width: 100px
+}
+
+li a:hover:not(.active) {
+    background-color: #111;
+}
+
+.active {
+    background-color: #4CAF50;
+}
+
+video {
+    background: rgb(0, 0, 0);
+    border: 1px solid gray;
+}
+
+#localVideo {
+    width: 160px;
+    height: 120px;
+    border-style: solid;
+    border-color: #bbb;
+    position: fixed;
+}
+
+#remoteVideo {
+    width: 420px;
+    height: 300px;
+    /* position: fixed; */
+}
+
+.remoteVideo {
+    width: 420px;
+    height: 300px;
+    /* position: fixed; */
+}
+
+table,
+td {
+    border: 1px solid black;
+}

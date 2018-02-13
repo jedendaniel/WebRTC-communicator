@@ -17,12 +17,14 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
+    @CrossOrigin
     @RequestMapping(value = "users", method = RequestMethod.GET)
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> list = userService.getAllUsers();
         return new ResponseEntity<List<User>>(list, HttpStatus.OK);
     }
 
+    @CrossOrigin
     @RequestMapping(value = "user", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<User> getUser(@RequestParam(value = "name", required = false) String name,
                                         @RequestParam(value = "login", required = false) String login) {
@@ -37,6 +39,7 @@ public class UserController {
         }
     }
 
+    @CrossOrigin
     @RequestMapping(value = "users", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity<Void> addUser(@RequestBody User postedUser) {
         boolean flag = userService.addUser(postedUser);
@@ -46,6 +49,7 @@ public class UserController {
         return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
 
+    @CrossOrigin
     @RequestMapping(value = "users", method = RequestMethod.PATCH, consumes = "application/json")
     public ResponseEntity<String> updateUser(@RequestBody User[] user) {
         StringBuilder message = new StringBuilder();
@@ -73,6 +77,7 @@ public class UserController {
         return new ResponseEntity<String>(message.toString(), HttpStatus.CONFLICT);
     }
 
+    @CrossOrigin
     @RequestMapping(value = "users", method = RequestMethod.DELETE, consumes = "application/json")
     public ResponseEntity<Void> deleteUser(@RequestBody User postedUser) {
         boolean flag = userService.deleteUser(postedUser);

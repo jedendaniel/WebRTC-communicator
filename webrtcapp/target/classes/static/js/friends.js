@@ -4,7 +4,7 @@ function setupFriendsContent() {
     document.getElementById("invite").addEventListener('click', function() { sendRelationInvitation(); });
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:8090/api/relations?user=' + localStorage.getItem("login"),
+        url: 'https://192.168.0.110:8090/api/relations?user=' + localStorage.getItem("login"),
         success: function(response) {
             relations = response;
             loadWaitingTable();
@@ -32,7 +32,7 @@ function sendRelationInvitation() {
     $.ajax({
         contentType: "application/json; charset=utf-8",
         type: 'POST',
-        url: 'http://localhost:8090/api/relations',
+        url: 'https://192.168.0.110:8090/api/relations',
         data: JSON.stringify(relation),
         success: function() {
             var table = document.getElementById("sentTable");
@@ -51,7 +51,7 @@ function sendRelationInvitation() {
 function loadWaitingTable() {
     var i = 1;
     relations.forEach(function(element) {
-        if (element.status2 === "PENDING" && element.usr2Id.name === localStorage.getItem("login")) {
+        if (element.status2 === "PENDING" && element.usr2Id.login === localStorage.getItem("login")) {
             var table = document.getElementById("waitingTable");
             var row = table.insertRow(i);
             var cell1 = row.insertCell(0);
@@ -68,7 +68,7 @@ function loadWaitingTable() {
 function loadSentTable() {
     var i = 1;
     relations.forEach(function(element) {
-        if (element.status1 === "SENT" && element.usr1Id.name === localStorage.getItem("login")) {
+        if (element.status1 === "SENT" && element.usr1Id.login === localStorage.getItem("login")) {
             var table = document.getElementById("sentTable");
             var row = table.insertRow(i);
             var cell1 = row.insertCell(0);
@@ -83,7 +83,7 @@ function loadSentTable() {
 function loadBlockedTable() {
     var i = 1;
     relations.forEach(function(element) {
-        if (element.status2 === "BLOCKED" && element.usr1Id.name === localStorage.getItem("login")) {
+        if (element.status2 === "BLOCKED" && element.usr1Id.login === localStorage.getItem("login")) {
             var table = document.getElementById("blockedTable");
             var row = table.insertRow(i);
             var cell1 = row.insertCell(0);
@@ -91,7 +91,7 @@ function loadBlockedTable() {
             cell1.innerHTML = element.usr2Id.name;
             cell2.innerHTML = "<label style='color:blue;pading-left:2px;cursor:pointer;' onclick=unblock('" + element.usr1Id.name + "'," + true + "," + i + ")><u>unblock</u></label>";
             i++;
-        } else if (element.status1 === "BLOCKED" && element.usr2Id.name === localStorage.getItem("login")) {
+        } else if (element.status1 === "BLOCKED" && element.usr2Id.login === localStorage.getItem("login")) {
             var table = document.getElementById("blockedTable");
             var row = table.insertRow(i);
             var cell1 = row.insertCell(0);
@@ -118,7 +118,7 @@ function accept(user, i) {
     $.ajax({
         contentType: "application/json; charset=utf-8",
         type: 'PATCH',
-        url: 'http://localhost:8090/api/relations',
+        url: 'https://192.168.0.110:8090/api/relations',
         data: JSON.stringify(relation),
         success: function() {
             document.getElementById("waitingTable").deleteRow(i);
@@ -145,7 +145,7 @@ function reject(user, i) {
     $.ajax({
         contentType: "application/json; charset=utf-8",
         type: 'PATCH',
-        url: 'http://localhost:8090/api/relations',
+        url: 'https://192.168.0.110:8090/api/relations',
         data: JSON.stringify(relation),
         success: function() {
             document.getElementById("waitingTable").deleteRow(i);
@@ -185,7 +185,7 @@ function unblock(user, meFirsInRelation, i) {
     $.ajax({
         contentType: "application/json; charset=utf-8",
         type: 'PATCH',
-        url: 'http://localhost:8090/api/relations',
+        url: 'https://192.168.0.110:8090/api/relations',
         data: JSON.stringify(relation),
         success: function() {
             alert('accepted');

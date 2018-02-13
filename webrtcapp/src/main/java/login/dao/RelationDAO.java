@@ -50,16 +50,19 @@ public class RelationDAO implements IRelationDAO {
         return null;
     }
 
+    @Transactional
     @Override
     public void addRelation(Relation relation) {
         entityManager.persist(relation);
     }
 
+    @Transactional
     @Override
     public void updateRelation(Relation relation) {
         entityManager.merge(relation);
     }
 
+    @Transactional
     @Override
     public void deleteRelation(Relation relation) {
         entityManager.remove(relation);
