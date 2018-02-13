@@ -63,13 +63,13 @@ public class UserControllerTest {
 
     private User user;
 
-    @Before
-    public void setupTests() {
-        user = new User("testUserName",
-                "testUserLogin",
-                "testUserPassword",
-                "ROLE_USER", false);
-    }
+//    @Before
+//    public void setupTests() {
+//        user = new User("testUserName",
+//                "testUserLogin",
+//                "testUserPassword",
+//                "ROLE_USER", false);
+//    }
 
     // @Test
     // public void foundUserByLogin() throws Exception {

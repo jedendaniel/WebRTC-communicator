@@ -27,7 +27,7 @@ function startVideoTalk() {
         singleMode = true;
         init = true;
         setupConnection();
-        document.getElementById('files').addEventListener('change', handleFileSelect, false);
+        document.getElementById('file').addEventListener('change', handleFileSelect, false);
     });
 }
 
@@ -37,20 +37,14 @@ function acceptVideoTalk() {
         singleMode = true;
         init = false;
         setupConnection();
-        document.getElementById('files').addEventListener('change', handleFileSelect, false);
+        document.getElementById('file').addEventListener('change', handleFileSelect, false);
     });
 }
 
 function handleFileSelect(evt) {
-    files = evt.target.files; // FileList object
-
-    // files is a FileList of File objects. List some properties.
-    var output = [];
-    for (var i = 0, f; f = files[i]; i++) {
-        output.push('<li><strong>', escape(f.name), '</strong>',
-            f.size, '</li>');
-    }
-    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+    file = document.getElementById('file').files[0];
+    currentChunk = 0;
+    // readNextChunk();
 }
 
 function disconnectFromTalk() {

@@ -49,7 +49,8 @@ function onGroupMessage(message) {
                 init = false;
                 recipient = msg.sender;
                 singleMode = false;
-                setupGroupConnection();
+                //herere
+                setupConnection();
                 sendWebSocketMessage({
                     type: "initializeRequest",
                     recipient: msg.sender,

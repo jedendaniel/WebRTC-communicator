@@ -14,8 +14,15 @@ var singleMode;
 
 function setupConnection() {
     localVideo = document.getElementById('localVideo');
-    remoteVideo = document.getElementById('remoteVideo');
-    videosGroup[recipient] = remoteVideo;
+    if (singleMode) {
+        remoteVideo = document.getElementById('remoteVideo');
+        videosGroup[recipient] = remoteVideo;
+    } else {
+        var newVideo = document.createElement('video');
+        newVideo.className += " remoteVideo";
+        document.getElementById("videoDiv").appendChild(newVideo);
+        videosGroup[recipient] = newVideo;
+    }
     chatArea = document.getElementById('chatArea');
     newChatMessage = document.getElementById('newChatMessage');
     sender = localStorage.getItem("login");
@@ -32,12 +39,11 @@ function setupConnection() {
                 initConnection(mediaStream);
             })
             .catch(function(err) { console.log(err.name + ": " + err.message); });
-        // navigator.mediaDevices.getUserMedia({ video: true, audio: true }, function(myStream) {
-        //     initConnection(myStream)
-        // }, function(error) {
-        //     console.log(error);
-        // });
     }
+}
+
+function setupVideoStreams() {
+
 }
 
 function initConnection(myStream) {
@@ -65,14 +71,15 @@ function initConnection(myStream) {
             });
         }
     };
+    setupDataChannel();
+}
 
-
+function setupDataChannel() {
     if (init) {
         dataChannelsGroup[recipient] = connectionsGroup[recipient].createDataChannel("myDataChannel", { reliable: true });
         dataChannelsGroup[recipient].onmessage = handleChatMessage;
-        connectionsGroup[recipient] = connectionsGroup[recipient];
         if (singleMode) { sendInvitation(); } else {
-
+            sendOffer();
         }
     } else {
         connectionsGroup[recipient].ondatachannel = function(event) {
@@ -86,9 +93,7 @@ function initConnection(myStream) {
                 console.log("channel opened");
             };
         }
-        if (singleMode) { acceptInvitation(); } else {
-
-        }
+        if (singleMode) { acceptInvitation(); }
     }
 }
 
@@ -149,52 +154,104 @@ function handleCandidate(candidate) {
 };
 
 function sendChatMessage() {
-    dataChannelsGroup[recipient].send(newChatMessage.value);
+    // dataChannelsGroup[recipient].send(JSNO.stringify({
+    //     type: chat,
+    //     data: newChatMessage.value
+    // }));
+    for (var key in dataChannelsGroup) {
+        dataChannelsGroup[key].send(JSON.stringify({
+            type: 'chat',
+            data: newChatMessage.value
+        }));
+    }
     chatArea.value += "\n" + sender + ": " + newChatMessage.value;
     newChatMessage.value = "";
 }
 
 function handleChatMessage() {
     if (typeof event.data === 'string') {
-        chatArea.value += "\n" + recipient + ": " + event.data;
-        return;
-        // new File([new Uint8Array(event.data)]);
-    }
-    // blob = new Blob([new Uint8Array(event.data)]);
-    // new Flie([])
-}
-
-function sendFiles() {
-    var i = 0;
-    var reader = new FileReader();
-    var CHUNK_LEN = 64000;
-    var binaryFiles = [];
-    reader.onloadend = function() {
-        binaryFiles.push(reader.result);
-        if (i < files.length) {
-            binaryFiles.push(reader.readAsBinaryString(files[i]));
-            i++;
-        } else {
-            for (i = 0; i < binaryFiles.length; i++) {
-                var len = binaryFiles[i].length;
-                var numChunks = binaryFiles[i].length / CHUNK_LEN;
-                var n = binaryFiles[i].length / CHUNK_LEN;
-
-                for (i = 0; i < n; i++) {
-                    var start = i * CHUNK_LEN;
-                    var end = (i + 1) * CHUNK_LEN;
-                    connectionsGroup[recipient].send(binaryFiles[i].substring(start, end));
-                }
-                if (len % CHUNK_LEN) {
-                    connectionsGroup[recipient].send(binaryFiles[i].substring(n * CHUNK_LEN));
-                }
-                connectionsGroup[recipient].send(binaryFiles[i]);
-            }
+        var msg = JSON.parse(event.data);
+        if (msg.type === 'chat') {
+            chatArea.value += "\n" + recipient + ": " + msg.data;
+            return;
+        } else if (msg.type === 'file') {
+            incomingFileInfo = JSON.parse(msg.data);
+            startDownload(event.data);
         }
     }
-    if (files.length > 0) {
-        reader.readAsArrayBuffer(files[i]);
-        // reader.readAsBinaryString();
-        i++;
+    if (typeof event.data === 'object') {
+        progressDownload(event.data);
+    }
+}
+
+const BYTES_PER_CHUNK = 1200;
+var file;
+var currentChunk;
+var fileInput = $('input[type=file]');
+var fileReader = new FileReader();
+
+function sendFile() {
+    dataChannelsGroup[recipient].send(JSON.stringify({
+        type: 'file',
+        data: JSON.stringify({
+            fileName: file.name,
+            fileSize: file.size
+        })
+    }));
+    readNextChunk();
+}
+
+function readNextChunk() {
+    var start = BYTES_PER_CHUNK * currentChunk;
+    var end = Math.min(file.size, start + BYTES_PER_CHUNK);
+    fileReader.readAsArrayBuffer(file.slice(start, end));
+}
+
+fileReader.onload = function() {
+    // dataChannelsGroup[recipient].send(fileReader.result);
+    dataChannelsGroup[recipient].send(fileReader.result);
+    currentChunk++;
+
+    if (BYTES_PER_CHUNK * currentChunk < file.size) {
+        readNextChunk();
+    }
+};
+
+var incomingFileInfo;
+var incomingFileData;
+var bytesReceived;
+var downloadInProgress = false;
+
+function startDownload(data) {
+    // incomingFileInfo = JSON.parse(data.toString());
+    incomingFileData = [];
+    bytesReceived = 0;
+    downloadInProgress = true;
+    console.log('incoming file <b>' + incomingFileInfo.fileName + '</b> of ' + incomingFileInfo.fileSize + ' bytes');
+}
+
+function progressDownload(data) {
+    bytesReceived += data.byteLength;
+    incomingFileData.push(data);
+    console.log('progress: ' + ((bytesReceived / incomingFileInfo.fileSize) * 100).toFixed(2) + '%');
+    if (bytesReceived === incomingFileInfo.fileSize) {
+        endDownload();
+    }
+}
+
+function endDownload() {
+    downloadInProgress = false;
+    var blob = new window.Blob(incomingFileData);
+    var anchor = document.createElement('a');
+    anchor.href = URL.createObjectURL(blob);
+    anchor.download = incomingFileInfo.fileName;
+    anchor.textContent = 'XXXXXXX';
+
+    if (anchor.click) {
+        anchor.click();
+    } else {
+        var evt = document.createEvent('MouseEvents');
+        evt.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+        anchor.dispatchEvent(evt);
     }
 }
