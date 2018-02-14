@@ -164,7 +164,7 @@ function sendChatMessage() {
             data: newChatMessage.value
         }));
     }
-    chatArea.value += "\n" + sender + ": " + newChatMessage.value;
+    chatArea.value += "\n" + localStorage.getItem("name") + ": " + newChatMessage.value;
     newChatMessage.value = "";
 }
 
