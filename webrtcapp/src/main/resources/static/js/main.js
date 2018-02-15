@@ -7,22 +7,20 @@ $(function() {
             // setTimeout(function() { setAvailability(0); }, 200000);
             setAvailability(0);
             groupName = null;
-            for (var key in connectionsGroup) {
-                yourConn = connectionsGroup[key];
+            for (var key in connectionsDict) {
+                yourConn = connectionsDict[key];
                 disconnect();
             }
-            // return confirm("Do you really want to close?");
-
         };
-        connectionsGroup = {};
-        videosGroup = {};
+        connectionsDict = {};
+        remoteVideosDict = {};
         remoteVideo = null;
         localVideo = null;
         singleMode = null;
         init = null;
         setAvailability(1);
         loadHomeContent();
-        displayFriendsList();
+        //displayFriendsList();
     });
 });
 

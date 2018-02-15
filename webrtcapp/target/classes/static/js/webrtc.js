@@ -1,27 +1,27 @@
-var localVideo;
-var remoteVideo;
-var chatArea;
-var newChatMessage;
-
-var files = [];
-var blob;
-
 var recipient;
 var sender = localStorage.getItem("login");
 
 var init;
 var singleMode;
 
+var localVideo;
+var chatArea;
+var newChatMessage;
+var remoteVideosDict = {};
+
+var connectionsDict = {};
+var dataChannelsDict = {};
+
 function setupConnection() {
     localVideo = document.getElementById('localVideo');
     if (singleMode) {
         remoteVideo = document.getElementById('remoteVideo');
-        videosGroup[recipient] = remoteVideo;
+        remoteVideosDict[recipient] = remoteVideo;
     } else {
         var newVideo = document.createElement('video');
         newVideo.className += " remoteVideo";
         document.getElementById("videoDiv").appendChild(newVideo);
-        videosGroup[recipient] = newVideo;
+        remoteVideosDict[recipient] = newVideo;
     }
     chatArea = document.getElementById('chatArea');
     newChatMessage = document.getElementById('newChatMessage');
@@ -53,15 +53,15 @@ function initConnection(myStream) {
     var configuration = {
         "iceServers": [{ "url": "stun:stun2.1.google.com:19302" }]
     };
-    connectionsGroup[recipient] = new RTCPeerConnection(configuration, { optional: [{ RtcDataChannels: true }] });
+    connectionsDict[recipient] = new RTCPeerConnection(configuration, { optional: [{ RtcDataChannels: true }] });
     console.log("RTCPeerConnection object was created");
-    connectionsGroup[recipient].addStream(stream);
+    connectionsDict[recipient].addStream(stream);
 
-    connectionsGroup[recipient].onaddstream = function(e) {
-        videosGroup[recipient].src = window.URL.createObjectURL(e.stream);
+    connectionsDict[recipient].onaddstream = function(e) {
+        remoteVideosDict[recipient].src = window.URL.createObjectURL(e.stream);
     };
 
-    connectionsGroup[recipient].onicecandidate = function(event) {
+    connectionsDict[recipient].onicecandidate = function(event) {
         if (event.candidate) {
             sendWebSocketMessage({
                 type: "candidate",
@@ -76,20 +76,20 @@ function initConnection(myStream) {
 
 function setupDataChannel() {
     if (init) {
-        dataChannelsGroup[recipient] = connectionsGroup[recipient].createDataChannel("myDataChannel", { reliable: true });
-        dataChannelsGroup[recipient].onmessage = handleChatMessage;
+        dataChannelsDict[recipient] = connectionsDict[recipient].createDataChannel("myDataChannel", { reliable: true });
+        dataChannelsDict[recipient].onmessage = handleChatMessage;
         if (singleMode) { sendInvitation(); } else {
             sendOffer();
         }
     } else {
-        connectionsGroup[recipient].ondatachannel = function(event) {
-            dataChannelsGroup[recipient] = event.channel;
+        connectionsDict[recipient].ondatachannel = function(event) {
+            dataChannelsDict[recipient] = event.channel;
             console.log('Data channel created!');
-            dataChannelsGroup[recipient].onerror = function(error) {
+            dataChannelsDict[recipient].onerror = function(error) {
                 console.log("Error:", error);
             };
-            dataChannelsGroup[recipient].onmessage = handleChatMessage;
-            dataChannelsGroup[recipient].onopen = function() {
+            dataChannelsDict[recipient].onmessage = handleChatMessage;
+            dataChannelsDict[recipient].onopen = function() {
                 console.log("channel opened");
             };
         }
@@ -102,22 +102,22 @@ function onInitError(error) {
 }
 
 function sendOffer() {
-    connectionsGroup[recipient].createOffer(function(offer) {
+    connectionsDict[recipient].createOffer(function(offer) {
         sendWebSocketMessage({
             type: "offer",
             recipient: recipient,
             sender: sender,
             data: JSON.stringify(offer)
         });
-        connectionsGroup[recipient].setLocalDescription(offer);
+        connectionsDict[recipient].setLocalDescription(offer);
     }, function(error) {
         alert("Error when creating an offer");
     });
 };
 
 function disconnect() {
-    connectionsGroup[recipient].close();
-    connectionsGroup[recipient].onicecandidate = null;
+    connectionsDict[recipient].close();
+    connectionsDict[recipient].onicecandidate = null;
     console.log("Disconnected");
     if (stompClient !== null) {
         stompClient.disconnect();
@@ -125,11 +125,11 @@ function disconnect() {
 }
 
 function handleOffer(offer) {
-    connectionsGroup[recipient].setRemoteDescription(new RTCSessionDescription(offer));
+    connectionsDict[recipient].setRemoteDescription(new RTCSessionDescription(offer));
 
     //create an answer to an offer 
-    connectionsGroup[recipient].createAnswer(function(answer) {
-        connectionsGroup[recipient].setLocalDescription(answer);
+    connectionsDict[recipient].createAnswer(function(answer) {
+        connectionsDict[recipient].setLocalDescription(answer);
         sendWebSocketMessage({
             type: "answer",
             recipient: recipient,
@@ -144,22 +144,18 @@ function handleOffer(offer) {
 
 //when we got an answer from a remote user 
 function handleAnswer(answer) {
-    connectionsGroup[recipient].setRemoteDescription(new RTCSessionDescription(answer));
+    connectionsDict[recipient].setRemoteDescription(new RTCSessionDescription(answer));
 };
 
 //when we got an ice candidate from a remote user 
 function handleCandidate(candidate) {
-    connectionsGroup[recipient].addIceCandidate(new RTCIceCandidate(candidate));
+    connectionsDict[recipient].addIceCandidate(new RTCIceCandidate(candidate));
     console.log("candidate added");
 };
 
 function sendChatMessage() {
-    // dataChannelsGroup[recipient].send(JSNO.stringify({
-    //     type: chat,
-    //     data: newChatMessage.value
-    // }));
-    for (var key in dataChannelsGroup) {
-        dataChannelsGroup[key].send(JSON.stringify({
+    for (var key in dataChannelsDict) {
+        dataChannelsDict[key].send(JSON.stringify({
             type: 'chat',
             data: newChatMessage.value
         }));
@@ -191,7 +187,7 @@ var fileInput = $('input[type=file]');
 var fileReader = new FileReader();
 
 function sendFile() {
-    dataChannelsGroup[recipient].send(JSON.stringify({
+    dataChannelsDict[recipient].send(JSON.stringify({
         type: 'file',
         data: JSON.stringify({
             fileName: file.name,
@@ -208,8 +204,7 @@ function readNextChunk() {
 }
 
 fileReader.onload = function() {
-    // dataChannelsGroup[recipient].send(fileReader.result);
-    dataChannelsGroup[recipient].send(fileReader.result);
+    dataChannelsDict[recipient].send(fileReader.result);
     currentChunk++;
 
     if (BYTES_PER_CHUNK * currentChunk < file.size) {
