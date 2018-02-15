@@ -2,13 +2,17 @@ var stompClient = null;
 
 $(function() {
     $(document).ready(function() {
+        setTimeout(window.close, 300000);
         window.onbeforeunload = function() {
+            // setTimeout(function() { setAvailability(0); }, 200000);
             setAvailability(0);
             groupName = null;
             for (var key in connectionsGroup) {
                 yourConn = connectionsGroup[key];
                 disconnect();
             }
+            // return confirm("Do you really want to close?");
+
         };
         connectionsGroup = {};
         videosGroup = {};
@@ -23,6 +27,16 @@ $(function() {
 });
 
 function loadHomeContent() {
+    $.ajax({
+        type: 'GET',
+        url: 'https://192.168.0.110:8090/api/user?login=' + localStorage.getItem('login'),
+        success: function(response) {
+            localStorage.setItem('name', response.name);
+        },
+        error: function() {
+            alert('Send WebSocket message error :(');
+        }
+    });
     $("#content-div").load("homeContent.html");
     checkNotifications();
 }

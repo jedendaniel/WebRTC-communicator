@@ -3,17 +3,37 @@ var socket = new SockJS('/webrtcapi-websocket');
 stompClient = Stomp.over(socket);
 stompClient.connect({}, function(frame) {
     stompClient.subscribe('/user/queue/messages', function(message) {
-        onMessage(message);
+        $.ajax({
+            type: 'GET',
+            url: 'https://192.168.0.110:8090/api/user?login=' + JSON.parse(message.body).sender,
+            success: function(response) {
+                var msg = JSON.parse(message.body);
+                msg.sender = response.name;
+                onMessage(msg);
+            },
+            error: function() {
+                alert('On WebSocket message error :(');
+            }
+        });
     });
 });
 
 function sendWebSocketMessage(message) {
-    stompClient.send("/app/chat", {}, JSON.stringify(message));
+    $.ajax({
+        type: 'GET',
+        url: 'https://192.168.0.110:8090/api/user?name=' + message.recipient,
+        success: function(response) {
+            message.recipient = response.login;
+            stompClient.send("/app/chat", {}, JSON.stringify(message));
+        },
+        error: function() {
+            alert('Send WebSocket message error :(');
+        }
+    });
 }
 
-function onMessage(message) {
-    console.log("Got message", message.body);
-    var msg = JSON.parse(message.body);
+function onMessage(msg) {
+    // console.log("Got message", message.body);
     recipient = msg.sender;
     sender = localStorage.getItem("login");
     switch (msg.type) {
@@ -44,7 +64,8 @@ function onMessage(message) {
         case "initializeRequest":
             init = true;
             singleMode = false;
-            setupGroupConnection();
+            //herere
+            setupConnection();
             break;
         default:
             break;

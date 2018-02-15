@@ -12,7 +12,7 @@ stompClient.connect({}, function(frame) {
                 onMessage(msg);
             },
             error: function() {
-                alert('notifications error :(');
+                alert('On WebSocket message error :(');
             }
         });
     });
@@ -27,7 +27,7 @@ function sendWebSocketMessage(message) {
             stompClient.send("/app/chat", {}, JSON.stringify(message));
         },
         error: function() {
-            alert('notifications error :(');
+            alert('Send WebSocket message error :(');
         }
     });
 }
