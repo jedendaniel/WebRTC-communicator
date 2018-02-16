@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="UserControllerTest" time="1.259" tests="5" errors="0" skipped="0" failures="0">
+<testsuite name="UserControllerTest" time="0.707" tests="5" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_131\jre\bin"/>
@@ -45,7 +45,7 @@
     <property name="java.vm.specification.version" value="1.8"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.home" value="C:\Program Files\Java\jdk1.8.0_131\jre"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher test"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean package"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
     <property name="user.language" value="pl"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
@@ -64,9 +64,9 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase name="createNewAccountDouble" classname="UserControllerTest" time="0.665"/>
-  <testcase name="notFoundUserByLogin" classname="UserControllerTest" time="0.156"/>
-  <testcase name="foundUserByLogin" classname="UserControllerTest" time="0.157"/>
-  <testcase name="updateUsersLogin" classname="UserControllerTest" time="0.14"/>
-  <testcase name="badRequestUserByLogin" classname="UserControllerTest" time="0.141"/>
+  <testcase name="createNewAccountDouble" classname="UserControllerTest" time="0.105"/>
+  <testcase name="notFoundUserByLogin" classname="UserControllerTest" time="0.14"/>
+  <testcase name="foundUserByLogin" classname="UserControllerTest" time="0.169"/>
+  <testcase name="updateUsersLogin" classname="UserControllerTest" time="0.149"/>
+  <testcase name="badRequestUserByLogin" classname="UserControllerTest" time="0.144"/>
 </testsuite>

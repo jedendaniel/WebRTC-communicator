@@ -6,11 +6,11 @@ function setupTalkContent() {
             document.getElementById("localVideo").src = localVideo.src;
         });
     } else {
-        if (Object.keys(connectionsGroup).length > 0) {
+        if (Object.keys(connectionsDict).length > 0) {
             $("#content-div").html("");
             $("#content-div").load("groupTalk.html", function() {
-                for (var key in videosGroup) {
-                    document.getElementById("videoDiv").appendChild(videosGroup[key]);
+                for (var key in remoteVideosDict) {
+                    document.getElementById("videoDiv").appendChild(remoteVideosDict[key]);
                 }
                 document.getElementById("localVideo").src = localVideo.src;
             });

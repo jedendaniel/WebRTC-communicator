@@ -86,7 +86,7 @@ function changePassword() {
         $.ajax({
             contentType: "application/json; charset=utf-8",
             type: 'PATCH',
-            url: 'https://192.168.0.110:8090/api/users',
+            url: 'https://192.168.0.103:8090/api/users',
             data: JSON.stringify(patchData),
             success: function(response) {
                 alert(response);
@@ -110,7 +110,7 @@ function changeLogin() {
         $.ajax({
             contentType: "application/json; charset=utf-8",
             type: 'PATCH',
-            url: 'https://192.168.0.110:8090/api/users',
+            url: 'https://192.168.0.103:8090/api/users',
             data: JSON.stringify(patchData),
             success: function(response) {
                 alert(response);
@@ -137,7 +137,7 @@ function changeName() {
         $.ajax({
             contentType: "application/json; charset=utf-8",
             type: 'PATCH',
-            url: 'https://192.168.0.110:8090/api/users',
+            url: 'https://192.168.0.103:8090/api/users',
             data: JSON.stringify(patchData),
             success: function(response) {
                 alert(response);
@@ -163,7 +163,7 @@ function changeAll() {
         $.ajax({
             contentType: "application/json; charset=utf-8",
             type: 'PATCH',
-            url: 'https://192.168.0.110:8090/api/users',
+            url: 'https://192.168.0.103:8090/api/users',
             data: JSON.stringify(patchData),
             success: function(response) {
                 alert(response);

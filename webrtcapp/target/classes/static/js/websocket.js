@@ -5,7 +5,7 @@ stompClient.connect({}, function(frame) {
     stompClient.subscribe('/user/queue/messages', function(message) {
         $.ajax({
             type: 'GET',
-            url: 'https://192.168.0.110:8090/api/user?login=' + JSON.parse(message.body).sender,
+            url: 'https://192.168.0.103:8090/api/user?login=' + JSON.parse(message.body).sender,
             success: function(response) {
                 var msg = JSON.parse(message.body);
                 msg.sender = response.name;
@@ -21,7 +21,7 @@ stompClient.connect({}, function(frame) {
 function sendWebSocketMessage(message) {
     $.ajax({
         type: 'GET',
-        url: 'https://192.168.0.110:8090/api/user?name=' + message.recipient,
+        url: 'https://192.168.0.103:8090/api/user?name=' + message.recipient,
         success: function(response) {
             message.recipient = response.login;
             stompClient.send("/app/chat", {}, JSON.stringify(message));
@@ -123,7 +123,7 @@ function sendWebSocketGroupMessage(address, message) {
 function onGroupMessage(message) {
     $.ajax({
         type: 'GET',
-        url: 'https://192.168.0.110:8090/api/user?login=' + JSON.parse(message.body).sender,
+        url: 'https://192.168.0.103:8090/api/user?login=' + JSON.parse(message.body).sender,
         success: function(response) {
             var msg = JSON.parse(message.body);
             msg.sender = response.name;

@@ -4,7 +4,7 @@ function setupFriendsContent() {
     document.getElementById("invite").addEventListener('click', function() { sendRelationInvitation(); });
     $.ajax({
         type: 'GET',
-        url: 'https://192.168.0.110:8090/api/relations?user=' + localStorage.getItem("login"),
+        url: 'https://192.168.0.103:8090/api/relations?user=' + localStorage.getItem("login"),
         success: function(response) {
             relations = response;
             loadWaitingTable();
@@ -32,7 +32,7 @@ function sendRelationInvitation() {
     $.ajax({
         contentType: "application/json; charset=utf-8",
         type: 'POST',
-        url: 'https://192.168.0.110:8090/api/relations',
+        url: 'https://192.168.0.103:8090/api/relations',
         data: JSON.stringify(relation),
         success: function() {
             var table = document.getElementById("sentTable");
@@ -118,7 +118,7 @@ function accept(user, i) {
     $.ajax({
         contentType: "application/json; charset=utf-8",
         type: 'PATCH',
-        url: 'https://192.168.0.110:8090/api/relations',
+        url: 'https://192.168.0.103:8090/api/relations',
         data: JSON.stringify(relation),
         success: function() {
             document.getElementById("waitingTable").deleteRow(i);
@@ -145,7 +145,7 @@ function reject(user, i) {
     $.ajax({
         contentType: "application/json; charset=utf-8",
         type: 'PATCH',
-        url: 'https://192.168.0.110:8090/api/relations',
+        url: 'https://192.168.0.103:8090/api/relations',
         data: JSON.stringify(relation),
         success: function() {
             document.getElementById("waitingTable").deleteRow(i);
@@ -185,7 +185,7 @@ function unblock(user, meFirsInRelation, i) {
     $.ajax({
         contentType: "application/json; charset=utf-8",
         type: 'PATCH',
-        url: 'https://192.168.0.110:8090/api/relations',
+        url: 'https://192.168.0.103:8090/api/relations',
         data: JSON.stringify(relation),
         success: function() {
             alert('accepted');
